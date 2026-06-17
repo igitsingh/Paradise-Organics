@@ -76,14 +76,7 @@ html, body {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* Scene 1 always visible — fades out on scroll */
-#scene-1 {
-  opacity: 1 !important;
-  visibility: visible !important;
+  /* No opacity/visibility here — GSAP controls each scene-content directly */
 }
 
 /* Center layout utility */
@@ -246,13 +239,17 @@ html, body {
   opacity: 0;
 }
 
-/* DESCEND CUE — animated scroll arrow */
+/* DESCEND CUE — scroll arrow */
 .cine-descend {
   font-family: var(--font-sans);
   font-size: 1.4rem;
   color: var(--color-gold-dim);
-  margin-top: 2.5rem;
-  opacity: 0;
+  margin-top: 2rem;
+  /* opacity is 0 by GSAP set; no CSS animation to avoid conflict */
+}
+
+/* After GSAP reveals the cue, we add .pulse class to start animation */
+.cine-descend.pulse {
   animation: descendPulse 2.8s ease-in-out infinite;
 }
 

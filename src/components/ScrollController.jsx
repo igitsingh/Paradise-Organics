@@ -121,7 +121,16 @@ export default function ScrollController({ state3D, overlayRef }) {
     const manifestoBlock = q('.manifesto-block');
 
     // ─── Set initial states ──────────────────────────────────
-    // All scroll-driven elements start invisible, shifted down
+    // Scene containers 2-10: start fully invisible
+    // (since we removed visibility:hidden from CSS, GSAP must own this)
+    const allSceneContents = [
+      s2Content, s3Content, s4Content,
+      s5Content, s6Content, s7Content,
+      s8Content, s9Content, s10Content,
+    ].filter(Boolean);
+    gsap.set(allSceneContents, { opacity: 0 });
+
+    // Individual text elements: start below + invisible for staggered reveals
     const scrollEls = [
       c2q1, c2q2, c2q3, c2q4,
       c3label, c3place, c3elev, c3desc,
@@ -133,17 +142,23 @@ export default function ScrollController({ state3D, overlayRef }) {
       c9brand, c9by, trustRow, c9cert,
       inviteBlock, ctaGroup, manifestoBlock,
     ].filter(Boolean);
-
     gsap.set(scrollEls, { opacity: 0, y: 18 });
+
     // Big number: starts large + invisible, scales down on entry for impact
     if (c7num) gsap.set(c7num, { opacity: 0, y: 0, scale: 1.25 });
 
     // ─── Scene 1: load animation (not scroll-driven) ──────────
+    // Scene 1 content starts visible (container is fully transparent siblings)
     gsap.set([c1Origin, c1Brand, c1Tagline, c1Cue], { opacity: 0, y: 18 });
     gsap.to(c1Origin,  { opacity: 1, y: 0, duration: 1.8, delay: 0.5, ease: 'power2.out' });
     gsap.to(c1Brand,   { opacity: 1, y: 0, duration: 2.2, delay: 1.2, ease: 'power2.out' });
     gsap.to(c1Tagline, { opacity: 1, y: 0, duration: 1.6, delay: 2.6, ease: 'power2.out' });
-    gsap.to(c1Cue,     { opacity: 1, y: 0, duration: 1.0, delay: 3.8, ease: 'power2.out' });
+    gsap.to(c1Cue,     {
+      opacity: 0.3, y: 0, duration: 1.0, delay: 3.8, ease: 'power2.out',
+      onComplete: () => { if (c1Cue) c1Cue.classList.add('pulse'); },
+    });
+
+
 
     // ─── Master Timeline ─────────────────────────────────────
     const tl = gsap.timeline({
