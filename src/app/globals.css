@@ -1,0 +1,363 @@
+/* CSS Variables for Luxury Brand Aesthetic */
+:root {
+  --color-emerald-deep: #01110a;
+  --color-emerald-dark: #022014;
+  --color-emerald-medium: #053b26;
+  --color-emerald-light: #0d5c3d;
+  
+  --color-gold: #dfb94d;
+  --color-gold-bright: #ffd700;
+  --color-gold-dark: #b8860b;
+  --color-gold-glow: rgba(223, 185, 77, 0.25);
+  
+  --color-ivory: #fcfbf8;
+  --color-ivory-dim: #d4d2cb;
+  --color-ivory-dark: #97958f;
+  
+  --font-serif: var(--font-cormorant), 'Times New Roman', serif;
+  --font-sans: var(--font-outfit), 'Helvetica Neue', Arial, sans-serif;
+  
+  --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-emerald-deep);
+  color: var(--color-ivory);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-emerald-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-emerald-dark);
+  border: 1px solid rgba(223, 185, 77, 0.1);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-emerald-medium);
+}
+
+/* Fixed Layout Containers */
+.webgl-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: auto; /* Allow dragging/controls if needed, otherwise ignore */
+}
+
+/* Scroll wrapper is a fixed container covering the screen */
+.scroll-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Stacking sections absolutely on top of each other */
+.scroll-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Interactive elements in fixed container must enable pointer-events */
+.ui-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.interactive {
+  pointer-events: auto;
+}
+
+/* Typography & Editorial layout */
+.title-main {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-ivory);
+  font-size: 3.5rem;
+  line-height: 1.1;
+  text-align: center;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+}
+
+.subtitle-main {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.text-editorial {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 2.2rem;
+  line-height: 1.4;
+  color: var(--color-ivory);
+  max-width: 800px;
+  text-align: center;
+  padding: 0 20px;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+}
+
+.heading-scene {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.text-description {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--color-ivory-dim);
+  max-width: 450px;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+  background: rgba(1, 17, 10, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(223, 185, 77, 0.12);
+  border-radius: 12px;
+  padding: 2.5rem;
+  max-width: 500px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  transform: translateZ(0); /* Force GPU acceleration */
+}
+
+/* Ambient Vignette & Volumetric shadows */
+.ambient-vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 30%, rgba(1, 17, 10, 0.7) 100%);
+}
+
+.gold-glow-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(223, 185, 77, 0.03) 0%, transparent 70%);
+}
+
+/* Buttons */
+.btn-gold {
+  display: inline-block;
+  padding: 1rem 2.2rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-emerald-deep);
+  background: var(--color-gold);
+  border: 1px solid var(--color-gold);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(223, 185, 77, 0.15);
+}
+
+.btn-gold:hover {
+  background: var(--color-gold-bright);
+  border-color: var(--color-gold-bright);
+  color: var(--color-emerald-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(223, 185, 77, 0.3);
+}
+
+.btn-outline {
+  display: inline-block;
+  padding: 1rem 2.2rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ivory);
+  background: transparent;
+  border: 1px solid rgba(252, 251, 248, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-align: center;
+}
+
+.btn-outline:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(223, 185, 77, 0.1);
+}
+
+.buttons-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 768px) {
+  .title-main {
+    font-size: 2.2rem;
+  }
+  
+  .subtitle-main {
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+  }
+  
+  .text-editorial {
+    font-size: 1.5rem;
+  }
+  
+  .heading-scene {
+    font-size: 1.8rem;
+  }
+  
+  .glass-card {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+  
+  .buttons-group {
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .btn-gold, .btn-outline {
+    width: 100%;
+  }
+}
+
+/* Navigation Brand Header */
+.brand-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.brand-nav-logo {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-ivory);
+  pointer-events: auto;
+}
+
+.brand-nav-tagline {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+@media (max-width: 768px) {
+  .brand-nav {
+    padding: 1.5rem;
+  }
+  .brand-nav-tagline {
+    display: none;
+  }
+}
+
+/* Sound Toggle button */
+.sound-toggle {
+  background: transparent;
+  border: 1px solid rgba(252, 251, 248, 0.2);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: var(--transition-fast);
+}
+
+.sound-toggle:hover {
+  border-color: var(--color-gold);
+  background: rgba(223, 185, 77, 0.1);
+}
+
+.sound-icon {
+  width: 16px;
+  height: 16px;
+  fill: var(--color-ivory);
+}
+
+.sound-toggle:hover .sound-icon {
+  fill: var(--color-gold);
+}
