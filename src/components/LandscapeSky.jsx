@@ -6,16 +6,31 @@ import * as THREE from 'three';
 function createCloudTexture() {
   if (typeof window === 'undefined') return null;
   const canvas = document.createElement('canvas');
-  canvas.width = 128;
-  canvas.height = 128;
+  canvas.width = 256;
+  canvas.height = 256;
   const ctx = canvas.getContext('2d');
-  const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-  grad.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
-  grad.addColorStop(0.2, 'rgba(245, 248, 246, 0.7)');
-  grad.addColorStop(0.6, 'rgba(220, 230, 225, 0.25)');
-  grad.addColorStop(1, 'rgba(220, 230, 225, 0.0)');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 128, 128);
+  
+  // Create a fluffy cloud shape by drawing multiple overlapping soft radial gradients
+  const drawPuff = (x, y, r, opacity) => {
+    const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+    grad.addColorStop(0, `rgba(255, 255, 255, ${opacity})`);
+    grad.addColorStop(0.4, `rgba(245, 248, 246, ${opacity * 0.8})`);
+    grad.addColorStop(1, `rgba(220, 230, 225, 0.0)`);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  };
+
+  // Draw an elongated, multi-puff cloud shape for realistic feel
+  drawPuff(128, 128, 60, 0.9); // center puff
+  drawPuff(80, 140, 50, 0.8);  // left puff
+  drawPuff(176, 140, 50, 0.8); // right puff
+  drawPuff(100, 110, 45, 0.7); // top left puff
+  drawPuff(156, 110, 45, 0.7); // top right puff
+  drawPuff(50, 150, 35, 0.6);  // far left tail
+  drawPuff(206, 150, 35, 0.6); // far right tail
+
   return new THREE.CanvasTexture(canvas);
 }
 
@@ -35,6 +50,53 @@ function createDotTexture() {
   return new THREE.CanvasTexture(canvas);
 }
 
+// Create a procedural grass texture for the terrain
+function createGrassTexture() {
+  if (typeof window === 'undefined') return null;
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+
+  // Base grass green (much brighter and richer)
+  ctx.fillStyle = '#1e4d2b';
+  ctx.fillRect(0, 0, 512, 512);
+
+  // Draw grass blades (top-down view)
+  for (let i = 0; i < 60000; i++) {
+    const x = Math.random() * 512;
+    const y = Math.random() * 512;
+    const length = 5 + Math.random() * 15;
+    const angle = Math.random() * Math.PI * 2;
+
+    const r = 20 + Math.random() * 20;
+    const g = 80 + Math.random() * 60;
+    const b = 30 + Math.random() * 30;
+    
+    ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.5 + Math.random() * 0.5})`;
+    ctx.lineWidth = 1.0 + Math.random() * 2.0;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length);
+    ctx.stroke();
+  }
+
+  // Add subtle sunlight highlights to the grass
+  for (let i = 0; i < 5000; i++) {
+    const x = Math.random() * 512;
+    const y = Math.random() * 512;
+    ctx.fillStyle = 'rgba(150, 200, 100, 0.3)';
+    ctx.fillRect(x, y, 2, 2);
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(20, 20); // Tile it across the terrain
+  return texture;
+}
+
 export default function LandscapeSky({ state3D }) {
   const terrainRef = useRef();
   const bgTerrainRef = useRef();
@@ -44,6 +106,7 @@ export default function LandscapeSky({ state3D }) {
 
   const cloudTexture = useMemo(() => createCloudTexture(), []);
   const dotTexture = useMemo(() => createDotTexture(), []);
+  const grassTexture = useMemo(() => createGrassTexture(), []);
 
   // 1. Detailed Foreground Mountain Terrain (Smooth shading)
   const terrainGeometry = useMemo(() => {
@@ -200,9 +263,10 @@ export default function LandscapeSky({ state3D }) {
         castShadow
       >
         <meshStandardMaterial
-          color="#012217" // deep forest emerald green
-          roughness={0.85}
-          metalness={0.15}
+          color="#ffffff" // White base so the texture colors shine through perfectly
+          map={grassTexture}
+          roughness={0.9}
+          metalness={0.0}
         />
       </mesh>
 
