@@ -144,7 +144,8 @@ export default function Home() {
     <main style={{ position: 'relative', width: '100%', minHeight: '100vh', backgroundColor: '#01110a' }}>
       
       {/* Scroll Spacer in normal document flow to create scroll depth */}
-      <div className="scroll-spacer" style={{ height: '1000vh', width: '100%', pointerEvents: 'none' }} />
+      {/* 1400vh gives breathing room for 10 cinematic scenes + manifesto */}
+      <div className="scroll-spacer" style={{ height: '1400vh', width: '100%', pointerEvents: 'none' }} />
       
       {/* 3D WebGL Canvas Layer */}
       {isClient && <SceneContainer state3D={state3D} />}
