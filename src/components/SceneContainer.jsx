@@ -51,19 +51,19 @@ export default function SceneContainer({ state3D }) {
         camera={{ position: [0, 80, 100], fov: 45, near: 0.1, far: 1000 }}
       >
         {/* Background color of WebGL scene */}
-        <color attach="background" args={['#01110a']} />
+        <color attach="background" args={['#0E3B2E']} />
         
         {/* Fog for atmospheric depth */}
-        <fogExp2 attach="fog" color="#01110a" density={0.003} />
+        <fogExp2 attach="fog" color="#0E3B2E" density={0.003} />
 
         {/* Ambient lighting */}
-        <ambientLight intensity={0.4} color="#fcfbf8" />
+        <ambientLight intensity={0.4} color="#F5F1E8" />
 
         {/* Cinematic Directional Light (Sun/Moonlight for mountain/sky scenes) */}
         <directionalLight
           position={[50, 80, 50]}
           intensity={1.2}
-          color="#fcfbf8"
+          color="#F5F1E8"
           castShadow
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
@@ -80,7 +80,7 @@ export default function SceneContainer({ state3D }) {
           angle={0.6}
           penumbra={1}
           intensity={3}
-          color="#dfb94d"
+          color="#C68A2D"
           castShadow
         />
 
@@ -88,7 +88,7 @@ export default function SceneContainer({ state3D }) {
         <pointLight
           position={[0, -10, 0]}
           intensity={state3D.rootOpacity * 5 * (1 - state3D.rootDissolve)}
-          color="#ffd700"
+          color="#C68A2D"
           distance={12}
         />
 

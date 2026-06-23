@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import SceneContainer from '@/components/SceneContainer';
 import TextOverlays from '@/components/TextOverlays';
 import ScrollController from '@/components/ScrollController';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   const overlayRef = useRef(null);
@@ -141,20 +143,22 @@ export default function Home() {
   };
 
   return (
-    <main style={{ position: 'relative', width: '100%', minHeight: '100vh', backgroundColor: '#01110a' }}>
+    <main style={{ position: 'relative', width: '100%', minHeight: '100vh', backgroundColor: '#0E3B2E' }}>
       
+      <Header soundActive={soundActive} onToggleSound={toggleSound} />
+
       {/* Scroll Spacer in normal document flow to create scroll depth */}
-      {/* 1400vh gives breathing room for 10 cinematic scenes + manifesto */}
-      <div className="scroll-spacer" style={{ height: '1400vh', width: '100%', pointerEvents: 'none' }} />
+      {/* 2800vh gives breathing room for 10 cinematic premium scenes */}
+      <div className="scroll-spacer" style={{ height: '2800vh', width: '100%', pointerEvents: 'none' }} />
       
+      <Footer />
+
       {/* 3D WebGL Canvas Layer */}
       {isClient && <SceneContainer state3D={state3D} />}
 
       {/* HTML Overlay Text & Cards Layer */}
       <TextOverlays 
         ref={overlayRef} 
-        soundActive={soundActive} 
-        onToggleSound={toggleSound} 
       />
 
       {/* Scroll timeline coordinator linking scrollbar to 3D state */}

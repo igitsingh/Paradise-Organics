@@ -1,29 +1,8 @@
 import React, { forwardRef } from 'react';
 
-const TextOverlays = forwardRef(({ soundActive, onToggleSound }, ref) => {
+const TextOverlays = forwardRef((props, ref) => {
   return (
     <div ref={ref} className="ui-overlay">
-
-      {/* ─── Navigation ─── */}
-      <nav className="brand-nav">
-        <div className="brand-nav-logo">Paradise Organics</div>
-        <div className="brand-nav-tagline">Origin Matters.</div>
-        <button
-          className="sound-toggle interactive"
-          onClick={onToggleSound}
-          aria-label={soundActive ? 'Mute' : 'Unmute'}
-        >
-          {soundActive ? (
-            <svg className="sound-icon" viewBox="0 0 24 24">
-              <path d="M6 9H2v6h4l5 5V4L6 9zm8 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
-            </svg>
-          ) : (
-            <svg className="sound-icon" viewBox="0 0 24 24">
-              <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
-            </svg>
-          )}
-        </button>
-      </nav>
 
       <div className="ambient-vignette" />
       <div className="gold-glow-overlay" />
@@ -31,187 +10,174 @@ const TextOverlays = forwardRef(({ soundActive, onToggleSound }, ref) => {
       <div className="scroll-wrapper">
 
         {/* ══════════════════════════════════════════════
-            SCENE 1 — THE GOLDEN SPHERE
-            Emotional: Curiosity → Mystery
-            3D Visual: Glowing golden sphere in sky
+            SECTION 1 — HERO
         ══════════════════════════════════════════════ */}
         <section id="scene-1" className="scroll-section cine-center" style={{ opacity: 1, visibility: 'visible' }}>
           <div className="scene-content cine-stack">
-            <p className="cine-whisper c1-origin">Origin Matters.</p>
-            <h1 className="cine-hero c1-brand">Paradise<br />Organics</h1>
-            <p className="cine-sub c1-tagline">The Golden Root™</p>
-            <p className="cine-descend c1-cue">↓</p>
+            <h1 className="cine-hero c1-headline" style={{ fontSize: '5rem', marginBottom: '1rem' }}>Origin Matters.</h1>
+            <p className="cine-line c1-sub" style={{ fontSize: '1.5rem', color: 'rgba(245, 241, 232, 0.8)' }}>
+              Some places create ingredients the world cannot replicate.
+            </p>
+            <p className="cine-descend c1-cue" style={{ marginTop: '4rem' }}>↓</p>
           </div>
         </section>
 
         {/* ══════════════════════════════════════════════
-            SCENE 2 — DESCENT INTO EARTH
-            Emotional: Mystery deepens
-            3D Visual: Camera descending through clouds/sky toward terrain
+            SECTION 2 — MEGHALAYA
         ══════════════════════════════════════════════ */}
         <section id="scene-2" className="scroll-section cine-center">
           <div className="scene-content cine-stack">
-            <p className="cine-line c2-q1">Not every origin</p>
-            <p className="cine-line c2-q2">tells its story.</p>
-            <p className="cine-pause c2-q3">Some must be found.</p>
-            <p className="cine-line-gold c2-q4">We found ours.</p>
+            <p className="cine-line c2-q1">Rain.</p>
+            <p className="cine-line c2-q2">Mist.</p>
+            <p className="cine-line c2-q3">Mountains.</p>
+            <p className="cine-line c2-q4">Altitude.</p>
+            <p className="cine-line c2-q5">Soil.</p>
+            <p className="cine-line-gold c2-q6" style={{ marginTop: '2rem', fontSize: '2rem' }}>Before there was turmeric, there was Meghalaya.</p>
           </div>
         </section>
 
         {/* ══════════════════════════════════════════════
-            SCENE 3 — APPROACHING THE EARTH
-            Emotional: Discovery begins
-            3D Visual: Terrain field below, camera descending fast
+            SECTION 3 — THE GOLDEN ROOT REVEAL
         ══════════════════════════════════════════════ */}
         <section id="scene-3" className="scroll-section cine-center">
           <div className="scene-content cine-stack">
-            <p className="cine-whisper c3-label">Northeast India.</p>
-            <p className="cine-hero-sm c3-place">Meghalaya.</p>
-            <p className="cine-data c3-elev">4,600 ft</p>
-            <p className="cine-whisper c3-desc">Ancient soil. Monsoon-fed. Irreplaceable.</p>
+            <p className="cine-word c3-w1">Origin.</p>
+            <p className="cine-word c3-w2">Soil.</p>
+            <p className="cine-word c3-w3">Farmers.</p>
+            <p className="cine-word c3-w4">Harvest.</p>
+            <p className="cine-word c3-w5">Processing.</p>
+            <p className="cine-reveal c3-name" style={{ marginTop: '2rem', fontSize: '3rem', color: '#B38A3D' }}>The Golden Root™</p>
           </div>
         </section>
 
         {/* ══════════════════════════════════════════════
-            SCENE 4 — BREAKING THROUGH EARTH
-            Emotional: Descent, anticipation
-            3D Visual: Diving underground, terrain disappears
+            SECTION 4 — PROOF & TRANSPARENCY
         ══════════════════════════════════════════════ */}
-        <section id="scene-4" className="scroll-section cine-center">
-          <div className="scene-content cine-stack">
-            <p className="cine-line c4-q1">Below the surface.</p>
-            <p className="cine-line-dim c4-q2">Below the ordinary.</p>
+        <section id="scene-4" className="scroll-section cine-right">
+          <div className="scene-content cine-stack" style={{ width: '100%', maxWidth: '800px', textAlign: 'left' }}>
+            <h2 className="c4-title" style={{ fontSize: '2.5rem', color: '#B38A3D', marginBottom: '3rem', borderBottom: '1px solid rgba(179, 138, 61, 0.3)', paddingBottom: '1rem' }}>Proof & Transparency</h2>
+            <div className="c4-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+              <div className="c4-item">
+                <p style={{ color: 'rgba(245, 241, 232, 0.5)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem' }}>Curcumin</p>
+                <p style={{ fontSize: '2rem', color: '#F5F1E8' }}>8.1% Verified</p>
+              </div>
+              <div className="c4-item">
+                <p style={{ color: 'rgba(245, 241, 232, 0.5)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem' }}>Heavy Metals</p>
+                <p style={{ fontSize: '1.5rem', color: '#F5F1E8' }}>Undetected</p>
+              </div>
+              <div className="c4-item">
+                <p style={{ color: 'rgba(245, 241, 232, 0.5)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem' }}>Traceability</p>
+                <p style={{ fontSize: '1.5rem', color: '#F5F1E8' }}>Farm-to-Jar</p>
+              </div>
+              <div className="c4-item">
+                <p style={{ color: 'rgba(245, 241, 232, 0.5)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem' }}>Processing</p>
+                <p style={{ fontSize: '1.5rem', color: '#F5F1E8' }}>Cold-milled &lt; 42°C</p>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* ══════════════════════════════════════════════
-            SCENE 5 — ROOT DISCOVERY
-            Emotional: Explorer discovers something rare
-            3D Visual: Underground cavern, roots glowing
+            SECTION 5 — WHY ORIGIN MATTERS
         ══════════════════════════════════════════════ */}
         <section id="scene-5" className="scroll-section cine-center">
-          <div className="scene-content cine-stack">
-            <p className="cine-line c5-q1">This is where</p>
-            <p className="cine-line c5-q2">rare begins.</p>
+          <div className="scene-content" style={{ width: '100vw', height: '100vh', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="c5-bg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, overflow: 'hidden' }}>
+              <img src="/images/aerial-farm.jpg" alt="Aerial Farm" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(14, 59, 46, 0.4)' }} />
+            </div>
+            <div className="cine-stack" style={{ textAlign: 'center', zIndex: 1, padding: '2rem', background: 'rgba(14, 59, 46, 0.7)', backdropFilter: 'blur(10px)', borderRadius: '4px', border: '1px solid rgba(179, 138, 61, 0.3)' }}>
+              <p className="cine-line c5-q1" style={{ fontSize: '2rem', color: 'rgba(245, 241, 232, 0.9)' }}>Wine has origin.</p>
+              <p className="cine-line c5-q2" style={{ fontSize: '2rem', color: 'rgba(245, 241, 232, 0.9)' }}>Coffee has origin.</p>
+              <p className="cine-line c5-q3" style={{ fontSize: '2rem', color: 'rgba(245, 241, 232, 0.9)' }}>Chocolate has origin.</p>
+              <p className="cine-line-gold c5-q4" style={{ fontSize: '3rem', marginTop: '2rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>Why not turmeric?</p>
+            </div>
           </div>
         </section>
 
         {/* ══════════════════════════════════════════════
-            SCENE 6 — THE GOLDEN ROOT REVEAL
-            Emotional: Climax — Respect + Authority
-            3D Visual: Root close-up, macro detail, gold glow
+            SECTION 6 — THE FARMERS
         ══════════════════════════════════════════════ */}
         <section id="scene-6" className="scroll-section cine-center">
-          <div className="scene-content cine-stack">
-            <p className="cine-word c6-w1">Rare.</p>
-            <p className="cine-word c6-w2">Verified.</p>
-            <p className="cine-word c6-w3">Irreplaceable.</p>
-            <p className="cine-reveal c6-name">The Golden Root™</p>
-            <p className="cine-whisper c6-origin">Lakadong · Meghalaya · India</p>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════
-            SCENE 7 — CURCUMIN AUTHORITY + TRANSFORMATION
-            Emotional: Respect → Authority
-            3D Visual: Root dissolves, powder swirls
-        ══════════════════════════════════════════════ */}
-        <section id="scene-7" className="scroll-section cine-center">
-          <div className="scene-content cine-stack">
-            <p className="cine-line c7-q1">Some roots contain gold.</p>
-            <p className="cine-line-gold c7-q2">This one is gold.</p>
-            <p className="cine-number c7-num">8.1<span className="cine-number-unit">%</span></p>
-            <p className="cine-data-label c7-label">Curcumin.</p>
-            <p className="cine-compare c7-compare">The world average: 2%.</p>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════
-            SCENE 8 — PRODUCT FORMATION
-            Emotional: Desire begins
-            3D Visual: Powder gathers, product jar materialises
-        ══════════════════════════════════════════════ */}
-        <section id="scene-8" className="scroll-section cine-center">
-          <div className="scene-content cine-stack">
-            <p className="cine-line c8-q1">Nothing added.</p>
-            <p className="cine-line c8-q2">Nothing removed.</p>
-            <p className="cine-whisper c8-q3">Cold-pressed. Below 42°C.</p>
-            <p className="cine-line-gold c8-q4">The curcumin survives.</p>
-            <p className="cine-whisper c8-q5">Intact.</p>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════
-            SCENE 9 — PRODUCT REVEAL + IMPORTER TRUST
-            Emotional: Trust + Authority
-            3D Visual: Product rotating, fully revealed
-        ══════════════════════════════════════════════ */}
-        <section id="scene-9" className="scroll-section cine-center">
-          <div className="scene-content cine-stack">
-            <p className="cine-reveal c9-brand">The Golden Root™</p>
-            <p className="cine-whisper c9-by">By Paradise Organics.</p>
-
-            <div className="cine-trust-row">
-              <div className="cine-trust-pill">
-                <span className="trust-num">01</span>
-                <span className="trust-text">Every batch numbered.</span>
-              </div>
-              <div className="cine-trust-pill">
-                <span className="trust-num">02</span>
-                <span className="trust-text">Every number traceable.</span>
-              </div>
-              <div className="cine-trust-pill">
-                <span className="trust-num">03</span>
-                <span className="trust-text">From root to record.</span>
-              </div>
+          <div className="scene-content" style={{ width: '100vw', height: '100vh', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', paddingBottom: '10vh' }}>
+            <div className="c6-bg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, overflow: 'hidden' }}>
+              <img src="/images/farmer-holding-root.jpg" alt="Farmer holding turmeric root" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to top, rgba(14, 59, 46, 0.9) 0%, transparent 60%)' }} />
             </div>
-
-            <p className="cine-cert c9-cert">NABL Certified · CoA Available · Export Ready</p>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════
-            SCENE 10 — INVITATION + MANIFESTO
-            Emotional: Desire → Action → Belonging
-            3D Visual: Final product close-up
-        ══════════════════════════════════════════════ */}
-        <section id="scene-10" className="scroll-section cine-center">
-          <div className="scene-content cine-stack scene-10-content">
-
-            <div className="invitation-block">
-              <p className="cine-whisper">This is not a waitlist.</p>
-              <p className="cine-line-gold">This is a reservation.</p>
-              <p className="cine-whisper" style={{ marginTop: '0.5rem' }}>
-                Batch PO-LKD-026 · Winter 2025
+            <div className="c6-text" style={{ textAlign: 'center', zIndex: 1, padding: '2rem' }}>
+              <p className="cine-line" style={{ fontSize: '4rem', color: '#F5F1E8', lineHeight: 1.1, textShadow: '0 4px 20px rgba(0,0,0,0.8)', margin: 0 }}>
+                Cultivated by generations.
+              </p>
+              <p style={{ fontSize: '4rem', color: '#F5F1E8', fontFamily: 'var(--font-serif)', fontStyle: 'italic', textShadow: '0 4px 20px rgba(0,0,0,0.8)' }}>
+                Honored by us.
               </p>
             </div>
+          </div>
+        </section>
 
-            <div className="cine-cta-group interactive">
-              <button
-                className="btn-cine-primary"
-                id="cta-allocate"
-                onClick={() => alert('Securing your allocation... coming soon.')}
-              >
-                Request Yours
-              </button>
-              <button
-                className="btn-cine-ghost"
-                id="cta-explore"
-                onClick={() => alert('Exploring origin... coming soon.')}
-              >
-                Explore The Origin
-              </button>
+        {/* ══════════════════════════════════════════════
+            SECTION 7 — FOR IMPORT PARTNERS
+        ══════════════════════════════════════════════ */}
+        <section id="scene-7" className="scroll-section cine-right">
+          <div className="scene-content cine-stack" style={{ width: '100%', maxWidth: '800px', textAlign: 'left', background: 'rgba(14, 59, 46, 0.8)', padding: '4rem', border: '1px solid rgba(179, 138, 61, 0.3)', backdropFilter: 'blur(10px)' }}>
+            <h2 className="c7-title" style={{ fontSize: '2rem', color: '#B38A3D', marginBottom: '2rem' }}>For Import Partners</h2>
+            <div className="c7-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+              <div><strong style={{ color: '#F5F1E8' }}>Capacity:</strong> <span style={{ color: 'rgba(245, 241, 232, 0.7)' }}>20 MT / Annual</span></div>
+              <div><strong style={{ color: '#F5F1E8' }}>MOQ:</strong> <span style={{ color: 'rgba(245, 241, 232, 0.7)' }}>100 kg</span></div>
+              <div><strong style={{ color: '#F5F1E8' }}>Formats:</strong> <span style={{ color: 'rgba(245, 241, 232, 0.7)' }}>Retail / Bulk 25kg</span></div>
+              <div><strong style={{ color: '#F5F1E8' }}>Documents:</strong> <span style={{ color: 'rgba(245, 241, 232, 0.7)' }}>CoA, Phyto, Origin</span></div>
             </div>
+            <button className="btn-cine-primary c7-btn" style={{ marginTop: '3rem' }}>Request Import Dossier</button>
+          </div>
+        </section>
 
-            <div className="manifesto-block">
-              <p className="manifesto-line">Origin is not a marketing word.</p>
-              <p className="manifesto-line">It is a verification.</p>
-              <div className="manifesto-mark">
-                <span className="manifesto-brand">Paradise Organics</span>
-                <span className="manifesto-loc">Meghalaya, India</span>
+        {/* ══════════════════════════════════════════════
+            SECTION 8 — IMPACT REPORT PREVIEW
+        ══════════════════════════════════════════════ */}
+        <section id="scene-8" className="scroll-section cine-right">
+          <div className="scene-content cine-stack" style={{ textAlign: 'center' }}>
+            <h2 className="c8-title" style={{ fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#B38A3D', marginBottom: '3rem' }}>Annual Impact</h2>
+            <div style={{ display: 'flex', gap: '4rem', justifyContent: 'center' }}>
+              <div className="c8-stat">
+                <p style={{ fontSize: '4rem', color: '#F5F1E8', lineHeight: '1' }}>45</p>
+                <p style={{ color: 'rgba(245, 241, 232, 0.6)', marginTop: '1rem' }}>Farmers Supported</p>
+              </div>
+              <div className="c8-stat">
+                <p style={{ fontSize: '4rem', color: '#F5F1E8', lineHeight: '1' }}>3x</p>
+                <p style={{ color: 'rgba(245, 241, 232, 0.6)', marginTop: '1rem' }}>Premium Paid</p>
+              </div>
+              <div className="c8-stat">
+                <p style={{ fontSize: '4rem', color: '#F5F1E8', lineHeight: '1' }}>100%</p>
+                <p style={{ color: 'rgba(245, 241, 232, 0.6)', marginTop: '1rem' }}>Traceable Supply</p>
               </div>
             </div>
+          </div>
+        </section>
 
+        {/* ══════════════════════════════════════════════
+            SECTION 9 — FOUNDER LETTER
+        ══════════════════════════════════════════════ */}
+        <section id="scene-9" className="scroll-section cine-right">
+          <div className="scene-content cine-stack" style={{ maxWidth: '600px' }}>
+            <div className="c9-photo" style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: 'rgba(179, 138, 61, 0.1)', border: '1px solid rgba(179, 138, 61, 0.3)', margin: '0 auto 2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(179, 138, 61, 0.5)' }}>[Photo]</div>
+            <p className="c9-text" style={{ fontSize: '1.4rem', lineHeight: '1.8', color: 'rgba(245, 241, 232, 0.9)', fontStyle: 'italic' }}>
+              "I did not start Paradise Organics to sell turmeric. I started it because remarkable ingredients deserve remarkable recognition."
+            </p>
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════════
+            SECTION 10 — FUTURE OF PARADISE
+        ══════════════════════════════════════════════ */}
+        <section id="scene-10" className="scroll-section cine-right">
+          <div className="scene-content cine-stack">
+            <p className="cine-line c10-today" style={{ fontSize: '1.5rem', color: 'rgba(245, 241, 232, 0.6)' }}>Today: Lakadong Turmeric.</p>
+            <p className="cine-line-gold c10-tomorrow" style={{ fontSize: '2.5rem', marginTop: '1rem' }}>Tomorrow: Exceptional ingredients from extraordinary origins.</p>
+            
+            <div className="c10-cta" style={{ marginTop: '4rem' }}>
+              <button className="btn-cine-primary" style={{ marginRight: '1rem' }}>Discover The Origin</button>
+              <button className="btn-cine-ghost">View The Journal</button>
+            </div>
           </div>
         </section>
 

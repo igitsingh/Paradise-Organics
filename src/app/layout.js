@@ -1,5 +1,6 @@
 import { Cormorant_Garamond, Outfit } from "next/font/google";
 import "./globals.css";
+import CookieBanner from "@/components/CookieBanner";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -37,6 +38,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${cormorant.variable} ${outfit.variable}`}>
       <body>
         {children}
+        <CookieBanner />
       </body>
     </html>
   );

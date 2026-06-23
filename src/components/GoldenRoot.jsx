@@ -98,8 +98,8 @@ function createSparkTexture() {
   const ctx = canvas.getContext('2d');
   const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
   grad.addColorStop(0, 'rgba(255, 215, 0, 1.0)'); // central gold
-  grad.addColorStop(0.25, 'rgba(223, 185, 77, 0.7)');
-  grad.addColorStop(1, 'rgba(223, 185, 77, 0.0)');
+  grad.addColorStop(0.25, 'rgba(179, 138, 61, 0.7)');
+  grad.addColorStop(1, 'rgba(179, 138, 61, 0.0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 32, 32);
   return new THREE.CanvasTexture(canvas);

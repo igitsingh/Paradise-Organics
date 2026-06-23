@@ -77,8 +77,8 @@ function createParticleTexture() {
   const ctx = canvas.getContext('2d');
   const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
   grad.addColorStop(0, 'rgba(255, 223, 77, 1.0)');
-  grad.addColorStop(0.3, 'rgba(223, 185, 77, 0.6)');
-  grad.addColorStop(1, 'rgba(223, 185, 77, 0.0)');
+  grad.addColorStop(0.3, 'rgba(179, 138, 61, 0.6)');
+  grad.addColorStop(1, 'rgba(179, 138, 61, 0.0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 32, 32);
   return new THREE.CanvasTexture(canvas);
@@ -236,7 +236,7 @@ export default function EarthTransition({ state3D }) {
         <mesh position={[0, -5, 0]} rotation={[0, 0, 0]}>
           <cylinderGeometry args={[0.3, 4.0, 14, 32, 1, true]} />
           <meshBasicMaterial
-            color="#dfb94d"
+            color="#B38A3D"
             transparent
             opacity={0.2}
             side={THREE.DoubleSide}
