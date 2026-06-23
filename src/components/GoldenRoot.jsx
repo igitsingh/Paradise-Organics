@@ -66,7 +66,7 @@ function createRootCutTexture() {
 
   // Concentric cellular layers
   for (let r = 15; r < 120; r += 12) {
-    ctx.strokeStyle = Math.random() > 0.5 ? '#ff9900' : '#802f00';
+    ctx.strokeStyle = Math.random() > 0.5 ? '#BF930F' : '#8A6805';
     ctx.lineWidth = 2 + Math.random() * 3;
     ctx.beginPath();
     ctx.arc(128, 128, r, 0, Math.PI * 2);
@@ -75,10 +75,10 @@ function createRootCutTexture() {
 
   // Extremely vibrant glowing center core
   const grad = ctx.createRadialGradient(128, 128, 0, 128, 128, 45);
-  grad.addColorStop(0, '#fff4cc'); // Golden white hot center
-  grad.addColorStop(0.3, '#ffcc00'); // Intense yellow
-  grad.addColorStop(0.7, '#ff6a00'); // Rich turmeric orange
-  grad.addColorStop(1.0, '#a33b00');
+  grad.addColorStop(0, '#F5F1E8'); // Ivory white hot center
+  grad.addColorStop(0.3, '#D4A822'); // Bright gold
+  grad.addColorStop(0.7, '#BF930F'); // Brand gold
+  grad.addColorStop(1.0, '#8A6805');
   
   ctx.fillStyle = grad;
   ctx.beginPath();
@@ -97,9 +97,9 @@ function createSparkTexture() {
   canvas.height = 32;
   const ctx = canvas.getContext('2d');
   const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-  grad.addColorStop(0, 'rgba(255, 215, 0, 1.0)'); // central gold
-  grad.addColorStop(0.25, 'rgba(179, 138, 61, 0.7)');
-  grad.addColorStop(1, 'rgba(179, 138, 61, 0.0)');
+  grad.addColorStop(0, 'rgba(191, 147, 15, 1.0)'); // central gold
+  grad.addColorStop(0.25, 'rgba(191, 147, 15, 0.7)');
+  grad.addColorStop(1, 'rgba(191, 147, 15, 0.0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 32, 32);
   return new THREE.CanvasTexture(canvas);
@@ -253,7 +253,7 @@ export default function GoldenRoot({ state3D }) {
           <meshStandardMaterial
             map={cutTexture}
             color="#ffffff"
-            emissive="#e65c00"
+            emissive="#BF930F"
             emissiveIntensity={2.0}
             roughness={0.2}
             metalness={0.6}
@@ -286,7 +286,7 @@ export default function GoldenRoot({ state3D }) {
         {sparkTexture && (
           <pointsMaterial
             map={sparkTexture}
-            color="#ffd700"
+            color="#BF930F"
             size={0.12}
             sizeAttenuation={true}
             transparent

@@ -46,7 +46,7 @@ const TextOverlays = forwardRef((props, ref) => {
             <p className="cine-word c3-w3">Farmers.</p>
             <p className="cine-word c3-w4">Harvest.</p>
             <p className="cine-word c3-w5">Processing.</p>
-            <p className="cine-reveal c3-name" style={{ marginTop: '2rem', fontSize: '3rem', color: '#B38A3D' }}>The Golden Root™</p>
+            <p className="cine-reveal c3-name" style={{ marginTop: '2rem', fontSize: '3rem', color: '#BF930F' }}>The Golden Root™</p>
           </div>
         </section>
 
@@ -55,7 +55,7 @@ const TextOverlays = forwardRef((props, ref) => {
         ══════════════════════════════════════════════ */}
         <section id="scene-4" className="scroll-section cine-right">
           <div className="scene-content cine-stack" style={{ width: '100%', maxWidth: '800px', textAlign: 'left' }}>
-            <h2 className="c4-title" style={{ fontSize: '2.5rem', color: '#B38A3D', marginBottom: '3rem', borderBottom: '1px solid rgba(179, 138, 61, 0.3)', paddingBottom: '1rem' }}>Proof & Transparency</h2>
+            <h2 className="c4-title" style={{ fontSize: '2.5rem', color: '#BF930F', marginBottom: '3rem', borderBottom: '1px solid rgba(179, 138, 61, 0.3)', paddingBottom: '1rem' }}>Proof & Transparency</h2>
             <div className="c4-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
               <div className="c4-item">
                 <p style={{ color: 'rgba(245, 241, 232, 0.5)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem' }}>Curcumin</p>
@@ -83,7 +83,7 @@ const TextOverlays = forwardRef((props, ref) => {
         <section id="scene-5" className="scroll-section">
           <div className="scene-content" style={{ width: '100vw', height: '100vh', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', paddingRight: '10vw' }}>
             <div className="c5-bg" data-speed="-0.5" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, overflow: 'hidden' }}>
-              <img src="/images/aerial-farm.jpg" alt="Aerial Farm" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
+              <img src="/images/Turmeric-Revolution.jpg.jpg" alt="Turmeric Revolution" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
               <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(14, 59, 46, 0.4)' }} />
             </div>
             <div className="cine-stack" data-speed="0.3" style={{ textAlign: 'center', zIndex: 1, padding: '3rem', background: 'rgba(14, 59, 46, 0.7)', backdropFilter: 'blur(10px)', borderRadius: '4px', border: '1px solid rgba(179, 138, 61, 0.3)', maxWidth: '500px' }}>
@@ -120,7 +120,7 @@ const TextOverlays = forwardRef((props, ref) => {
         ══════════════════════════════════════════════ */}
         <section id="scene-7" className="scroll-section cine-right">
           <div className="scene-content cine-stack" style={{ width: '100%', maxWidth: '800px', textAlign: 'left', background: 'rgba(14, 59, 46, 0.8)', padding: '4rem', border: '1px solid rgba(179, 138, 61, 0.3)', backdropFilter: 'blur(10px)' }}>
-            <h2 className="c7-title" style={{ fontSize: '2rem', color: '#B38A3D', marginBottom: '2rem' }}>For Import Partners</h2>
+            <h2 className="c7-title" style={{ fontSize: '2rem', color: '#BF930F', marginBottom: '2rem' }}>For Import Partners</h2>
             <div className="c7-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
               <div><strong style={{ color: '#F5F1E8' }}>Capacity:</strong> <span style={{ color: 'rgba(245, 241, 232, 0.7)' }}>20 MT / Annual</span></div>
               <div><strong style={{ color: '#F5F1E8' }}>MOQ:</strong> <span style={{ color: 'rgba(245, 241, 232, 0.7)' }}>100 kg</span></div>
@@ -136,7 +136,7 @@ const TextOverlays = forwardRef((props, ref) => {
         ══════════════════════════════════════════════ */}
         <section id="scene-8" className="scroll-section cine-right">
           <div className="scene-content cine-stack" style={{ textAlign: 'center' }}>
-            <h2 className="c8-title" style={{ fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#B38A3D', marginBottom: '3rem' }}>Annual Impact</h2>
+            <h2 className="c8-title" style={{ fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#BF930F', marginBottom: '3rem' }}>Annual Impact</h2>
             <div style={{ display: 'flex', gap: '4rem', justifyContent: 'center' }}>
               <div className="c8-stat">
                 <p style={{ fontSize: '4rem', color: '#F5F1E8', lineHeight: '1' }}>45</p>

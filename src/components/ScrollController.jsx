@@ -7,23 +7,31 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function ScrollController({ state3D, overlayRef }) {
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-
     // ─── Camera Keyframes ────────────────────────────────────
-    // We slow down the 3D transition so it anchors effectively behind S6-S10.
-    const camS1  = isMobile ? { x: 0, y: 220, z: 200 } : { x: 0, y: 220, z: 180 };
-    const camS2  = isMobile ? { x: 0, y: 45,  z: 90  } : { x: 0, y: 35,   z: 60  };
-    const camS3  = isMobile ? { x: 0, y: 16,  z: 30  } : { x: 0, y: 12,   z: 22  };
-    const camS4  = isMobile ? { x: 0, y: 8,   z: 15  } : { x: 0, y: 6,    z: 10  };
-    const camS5  = isMobile ? { x: 0, y: -4,  z: 11  } : { x: 0, y: -4,   z: 8   };
-    const camS6  = isMobile ? { x: 0, y: -9.5,z: 9   } : { x: 0, y: -9.5, z: 6   };
     
-    // Final product frames anchor for the remaining sections
-    const camFinal = isMobile ? { x:-0.2,y:-19.7,z:5.8 } : { x: 2.0, y:-19.7, z: 4.5 };
+    // The Lakadong Field center where the underground journey happens
+    const fieldX = 800;
+    const fieldZ = 400;
+    
+    // Cinematic Sweeping Descent Camera Path
+    const camS1 = { x: 800, y: 1200, z: 2500 }; // Cinematic angled high view showing mountains in back
+    const camS2 = { x: 800, y: 600, z: 1200 };  // Flying forward and down over the massive field
+    const camS3 = { x: 800, y: 150, z: 600 };   // Gliding just above the tiny glowing crops
+    const camS4 = { x: 800, y: -10, z: 400 };   // Hovering right above the ONE main glowing circle
+    const camS5 = { x: 800, y: -24, z: 406 };   // Underground viewing the root
+    const camFinal = { x: 802, y: -34.5, z: 404.5 }; // Viewing the final product jar
+
+    // Targets
+    const targetSurface = { x: 800, y: -20, z: 400 }; // The terrain surface center
+    const targetRoot = { x: 800, y: -25, z: 400 };    // The root underground
+    const targetProduct = { x: 800, y: -35, z: 400 }; // The product jar
 
     state3D.cameraPos.x = camS1.x;
     state3D.cameraPos.y = camS1.y;
     state3D.cameraPos.z = camS1.z;
+    state3D.cameraTarget.x = targetSurface.x;
+    state3D.cameraTarget.y = targetSurface.y;
+    state3D.cameraTarget.z = targetSurface.z;
 
     // ─── Lenis ───────────────────────────────────────────────
     const lenis = new Lenis({
@@ -65,8 +73,6 @@ export default function ScrollController({ state3D, overlayRef }) {
     gsap.set(c1Sub, { opacity: 0, y: 30, filter: 'blur(10px)' });
     gsap.set(c1Cue, { opacity: 0, y: 20 });
     
-    // Only the scroll cue fades in immediately so the user knows to scroll.
-    // The headline will appear in the scroll timeline after clearing the clouds.
     gsap.to(c1Cue, { opacity: 0.5, y: 0, duration: 1.5, delay: 1.0, ease: 'power2.out' });
 
     // S2 Meghalaya
@@ -117,7 +123,6 @@ export default function ScrollController({ state3D, overlayRef }) {
     const c10cta = q('.c10-cta');
     gsap.set([c10today, c10tomorrow, c10cta], { opacity: 0, y: 30, filter: 'blur(5px)' });
 
-
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '.scroll-spacer',
@@ -127,137 +132,118 @@ export default function ScrollController({ state3D, overlayRef }) {
       }
     });
 
-    // We stretch the timeline to 100 units for ease.
-    
-    // 0 - 10: Dive through clouds, reveal Origin Matters, then fade out and move to S2
-    tl.to(state3D.cameraPos, { ...camS2, duration: 10, ease: 'power1.inOut' }, 0)
-      .to(state3D.cameraTarget, { x: 0, y: 5, z: 0, duration: 10, ease: 'power1.inOut' }, 0)
-      .to(state3D, { fogDensity: 0.007, duration: 8 }, 0)
-      .to(state3D, { terrainGlow: 0.7, duration: 8 }, 2)
-      // Reveal text around t=2 once camera falls through the 180y cloud layer
+    // 0 - 10: Dive through clouds, reveal Origin Matters
+    tl.to(state3D.cameraPos, { ...camS2, duration: 10, ease: 'power2.inOut' }, 0)
+      .to(state3D, { fogDensity: 0.0001, duration: 8 }, 0)
+      .to(state3D, { terrainGlow: 0.8, duration: 8 }, 2)
       .to(c1Headline, { opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5 }, 2)
       .to(c1Sub, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5 }, 2.5)
-      // Fade out S1 content entirely as it approaches S2
-      .to('#scene-1 .scene-content', { opacity: 0, y: -50, duration: 2 }, 8);
+      .to('#scene-1 .scene-content', { opacity: 0, y: -50, duration: 2 }, 5);
 
-    // 10 - 20: S2 Meghalaya Reveal + Dive into earth
-    // 10 - 20: S2 Meghalaya Reveal + Dive into earth
-    tl.to(sections[0], { opacity: 1, duration: 1 }, 10)
-      .to(c2qAll[0], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }, 11)
-      .to(c2qAll[1], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }, 12)
-      .to(c2qAll[2], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }, 13)
-      .to(c2qAll[3], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }, 14)
-      .to(c2qAll[4], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }, 15)
-      .to(c2qAll[5], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 3, ease: 'power4.out' }, 16)
-      .to(sections[0], { opacity: 0, y: -30, duration: 2 }, 19)
-      .to(state3D.cameraPos, { ...camS4, duration: 5, ease: 'power1.inOut' }, 10)
-      .to(state3D.cameraTarget, { x: 0, y: 0, z: 0, duration: 5 }, 10)
-      // Dive below surface
-      .to(state3D.cameraPos, { ...camS5, duration: 5, ease: 'power3.in' }, 15)
-      .to(state3D.cameraTarget, { x: 0, y: -5, z: 0, duration: 5, ease: 'power3.in' }, 15)
-      .to(state3D, { terrainOpacity: 0, duration: 4 }, 15)
-      .to(state3D, { soilOpacity: 1, duration: 4 }, 15)
-      .to(state3D, { fogDensity: 0.045, duration: 4 }, 15);
+    // 6 - 29: Scrollytelling while diving straight into the field
+    tl.to(sections[0], { opacity: 1, duration: 1 }, 6)
+      // 1. Rain
+      .to(c2qAll[0], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 6)
+      .to(state3D, { cloudColor: 0.2, rainIntensity: 1, duration: 2 }, 6)
 
-    // 20 - 30: S3 Golden Root sequence (Origin -> Product)
-    tl.to(sections[1], { opacity: 1, duration: 1 }, 20)
-      .to(c3wAll[0], { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 20.5)
-      .to(c3wAll[0], { opacity: 0, y: -20, scale: 1.05, filter: 'blur(10px)', duration: 1.5, ease: 'power2.in' }, 21.5)
-      .to(c3wAll[1], { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 22)
-      .to(c3wAll[1], { opacity: 0, y: -20, scale: 1.05, filter: 'blur(10px)', duration: 1.5, ease: 'power2.in' }, 23)
-      .to(c3wAll[2], { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 23.5)
-      .to(c3wAll[2], { opacity: 0, y: -20, scale: 1.05, filter: 'blur(10px)', duration: 1.5, ease: 'power2.in' }, 24.5)
-      .to(c3wAll[3], { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 25)
-      .to(c3wAll[3], { opacity: 0, y: -20, scale: 1.05, filter: 'blur(10px)', duration: 1.5, ease: 'power2.in' }, 26)
-      .to(c3wAll[4], { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 26.5)
-      .to(c3wAll[4], { opacity: 0, y: -20, scale: 1.05, filter: 'blur(10px)', duration: 1.5, ease: 'power2.in' }, 27.5)
-      .to(c3name, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 2.5, ease: 'power4.out' }, 28)
-      .to(sections[1], { opacity: 0, duration: 1.5 }, 30)
+      // 2. Mist & closer to crops
+      .to(c2qAll[1], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 10)
+      .to(state3D.cameraPos, { ...camS3, duration: 8, ease: 'power1.inOut' }, 6)
+      .to(state3D, { fogDensity: 0.0008, duration: 4 }, 10)
+
+      // 3. See the glowing circles under the crops
+      .to(c2qAll[2], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 14)
+      .to(c2qAll[3], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 18)
+      .to(c2qAll[4], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 22)
+
+      // 4. Hover over the one main glowing circle
+      .to(state3D.cameraPos, { ...camS4, duration: 8, ease: 'power2.inOut' }, 15)
+
+      // 5. Dive underground
+      .to(state3D, { terrainOpacity: 0, duration: 2 }, 24)
+      .to(state3D.cameraPos, { ...camS5, duration: 5, ease: 'power3.inOut' }, 24)
+      .to(state3D.cameraTarget, { ...targetRoot, duration: 5, ease: 'power3.inOut' }, 24)
+      .to(sections[0], { opacity: 0, y: -30, duration: 2 }, 28);
+
+    // 30 - 40: S3 Golden Root sequence (Origin -> Product)
+    tl.to(sections[1], { opacity: 1, duration: 1 }, 30)
+      .to(c3wAll[0], { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 30.5)
+      .to(c3wAll[0], { opacity: 0, y: -20, scale: 1.05, filter: 'blur(10px)', duration: 1.5, ease: 'power2.in' }, 31.5)
+      .to(c3wAll[1], { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 32)
+      .to(c3wAll[1], { opacity: 0, y: -20, scale: 1.05, filter: 'blur(10px)', duration: 1.5, ease: 'power2.in' }, 33)
+      .to(c3wAll[2], { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 33.5)
+      .to(c3wAll[2], { opacity: 0, y: -20, scale: 1.05, filter: 'blur(10px)', duration: 1.5, ease: 'power2.in' }, 34.5)
+      .to(c3wAll[3], { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 35)
+      .to(c3wAll[3], { opacity: 0, y: -20, scale: 1.05, filter: 'blur(10px)', duration: 1.5, ease: 'power2.in' }, 36)
+      .to(c3wAll[4], { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 36.5)
+      .to(c3wAll[4], { opacity: 0, y: -20, scale: 1.05, filter: 'blur(10px)', duration: 1.5, ease: 'power2.in' }, 37.5)
+      .to(c3name, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 2.5, ease: 'power4.out' }, 38)
+      .to(sections[1], { opacity: 0, duration: 1.5 }, 40)
       
-      // Reveal the root (20-23)
-      .to(state3D.cameraPos, { ...camS6, duration: 3, ease: 'power1.out' }, 20)
-      .to(state3D.cameraTarget, { x: 0, y: -10, z: 0, duration: 3 }, 20)
-      .to(state3D, { rootOpacity: 1, duration: 2.5 }, 20)
+      // Root opacity fade in
+      .to(state3D, { rootOpacity: 1, duration: 2.5 }, 30)
       
-      // Dissolve root into powder (23-27)
-      .to(state3D, { rootDissolve: 1, duration: 4, ease: 'power1.inOut' }, 23)
-      .to(state3D, { powderSwirl: 1, duration: 4 }, 23)
-      .to(state3D.cameraPos, { x: -0.5, y: -14.0, z: 4.5, duration: 4, ease: 'power1.inOut' }, 23)
-      .to(state3D.cameraTarget, { x: 0, y: -16, z: 0, duration: 4 }, 23)
-      .to(state3D, { soilOpacity: 0.15, duration: 4 }, 23)
-      .to(state3D, { fogDensity: 0.018, duration: 4 }, 23)
+      // Dissolve root into powder (33-37)
+      .to(state3D, { rootDissolve: 1, powderSwirl: 1, duration: 4, ease: 'power1.inOut' }, 33)
+      .to(state3D.cameraPos, { x: 801, y: -29.0, z: 404.5, duration: 4, ease: 'power1.inOut' }, 33)
+      .to(state3D.cameraTarget, { x: 800, y: -31, z: 400, duration: 4 }, 33)
+      .to(state3D, { soilOpacity: 0.15, fogDensity: 0.018, duration: 4 }, 33)
       
-      // Powder forms into jar (27-30)
-      .to(state3D, { powderSwirl: 0, productOpacity: 1, duration: 3 }, 27)
-      .to(state3D.cameraPos, { ...camFinal, duration: 3, ease: 'power2.inOut' }, 27)
-      .to(state3D.cameraTarget, { x: isMobile ? 0 : 1.8, y: -20, z: 0, duration: 3 }, 27);
+      // Powder forms into jar (37-40)
+      .to(state3D, { powderSwirl: 0, productOpacity: 1, duration: 3 }, 37)
+      .to(state3D.cameraPos, { ...camFinal, duration: 3, ease: 'power2.inOut' }, 37)
+      .to(state3D.cameraTarget, { ...targetProduct, duration: 3 }, 37);
 
-    // 30 - 40: S4 Proof & Transparency (Apple style)
-    tl.to(sections[2], { opacity: 1, duration: 1 }, 32)
-      .to(c4title, { opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'power3.out' }, 32.5)
-      .to(c4items, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, stagger: 0.2, ease: 'power2.out' }, 33.5)
-      .to(sections[2], { opacity: 0, duration: 1.5 }, 39);
+    // 40 - 50: S4 Proof & Transparency (Apple style)
+    tl.to(sections[2], { opacity: 1, duration: 1 }, 42)
+      .to(c4title, { opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'power3.out' }, 42.5)
+      .to(c4items, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, stagger: 0.2, ease: 'power2.out' }, 43.5)
+      .to(sections[2], { opacity: 0, duration: 1.5 }, 49);
 
-    // 40 - 50: S5 Why Origin Matters (Wine, Coffee...)
-    tl.to(sections[3], { opacity: 1, duration: 1 }, 41)
-      .to(c5qAll[0], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 41.5)
-      .to(c5qAll[1], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 43)
-      .to(c5qAll[2], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 44.5)
-      .to(c5qAll[3], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2.0, ease: 'power4.out' }, 46.5)
-      .to(sections[3], { opacity: 0, duration: 1.5 }, 49);
+    // 50 - 60: S5 Why Origin Matters (Wine, Coffee...)
+    tl.to(sections[3], { opacity: 1, duration: 1 }, 51)
+      .to(c5qAll[0], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 51.5)
+      .to(c5qAll[1], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 53)
+      .to(c5qAll[2], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 54.5)
+      .to(c5qAll[3], { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2.0, ease: 'power4.out' }, 56.5)
+      .to(sections[3], { opacity: 0, duration: 1.5 }, 59);
 
-    // 50 - 60: S6 Farmers (Dark overlay with bg)
-    tl.to(sections[4], { opacity: 1, duration: 1 }, 51)
-      .to(c6bg, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 3, ease: 'power2.out' }, 51.5)
-      .to(c6text, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }, 53)
-      .to(sections[4], { opacity: 0, duration: 1.5 }, 59);
+    // 60 - 70: S6 Farmers (Dark overlay with bg)
+    tl.to(sections[4], { opacity: 1, duration: 1 }, 61)
+      .to(c6bg, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 3, ease: 'power2.out' }, 61)
+      .to(c6text, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }, 62)
+      .to(state3D, { productRotation: Math.PI * 0.5, duration: 9, ease: 'none' }, 61)
+      .to(sections[4], { opacity: 0, duration: 1.5 }, 68);
 
-    // 60 - 70: S7 Importers B2B Block
-    tl.to(sections[5], { opacity: 1, duration: 1 }, 61)
-      .to(c7box, { opacity: 1, y: 0, scale: 1, duration: 2, ease: 'power3.out' }, 61.5)
-      .to(sections[5], { opacity: 0, duration: 1.5 }, 69);
+    // 70 - 80: S7 Importers (Sleek card layout)
+    tl.to(sections[5], { opacity: 1, duration: 1 }, 71)
+      .to(c7box, { opacity: 1, y: 0, scale: 1, duration: 1.5, ease: 'power3.out' }, 71.5)
+      .to(state3D, { productRotation: Math.PI * 1.0, duration: 9, ease: 'none' }, 71)
+      .to(sections[5], { opacity: 0, duration: 1.5 }, 78);
 
-    // 70 - 80: S8 Impact Report Preview
-    tl.to(sections[6], { opacity: 1, duration: 1 }, 71)
-      .to(c8title, { opacity: 1, y: 0, letterSpacing: '0.2em', duration: 1.5, ease: 'power2.out' }, 71.5)
-      .to(c8stats, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, stagger: 0.3, ease: 'power3.out' }, 73)
-      .to(sections[6], { opacity: 0, duration: 1.5 }, 79);
+    // 80 - 90: S8 Impact (Typography driven numbers)
+    tl.to(sections[6], { opacity: 1, duration: 1 }, 81)
+      .to(c8title, { opacity: 1, y: 0, letterSpacing: '0em', duration: 1.5, ease: 'power3.out' }, 81.5)
+      .to(c8stats, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, stagger: 0.3, ease: 'power2.out' }, 82.5)
+      .to(state3D, { productRotation: Math.PI * 1.5, duration: 9, ease: 'none' }, 81)
+      .to(sections[6], { opacity: 0, duration: 1.5 }, 88);
 
-    // 80 - 90: S9 Founder Letter
-    tl.to(sections[7], { opacity: 1, duration: 1 }, 81)
-      .to(c9photo, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 81.5)
-      .to(c9text, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }, 83)
-      .to(sections[7], { opacity: 0, duration: 1.5 }, 89);
+    // 90 - 95: S9 Founder (Photo + Quote)
+    tl.to(sections[7], { opacity: 1, duration: 1 }, 90)
+      .to(c9photo, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 90.5)
+      .to(c9text, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 91)
+      .to(state3D, { productRotation: Math.PI * 2.0, duration: 5, ease: 'none' }, 90)
+      .to(sections[7], { opacity: 0, duration: 1 }, 94);
 
-    // 90 - 100: S10 Future of Paradise
-    tl.to(sections[8], { opacity: 1, duration: 1 }, 91)
-      .to(c10today, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 91.5)
-      .to(c10tomorrow, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }, 93.5)
-      .to(c10cta, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 95.5);
-
-    // Constant slow product rotation throughout remaining sections
-    tl.to(state3D, { productRotation: Math.PI * 4, duration: 80, ease: 'none' }, 20);
-
-    // Parallax Effects for overlay elements
-    const parallaxElements = qAll('[data-speed]');
-    parallaxElements.forEach((el) => {
-      const speed = parseFloat(el.getAttribute('data-speed')) || 0;
-      gsap.to(el, {
-        y: () => -100 * speed,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.scroll-spacer',
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: true,
-        }
-      });
-    });
+    // 95 - 100: S10 The Future (Final CTA)
+    tl.to(sections[8], { opacity: 1, duration: 0.5 }, 95)
+      .to(c10today, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 95)
+      .to(c10tomorrow, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' }, 96)
+      .to(c10cta, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, 97.5);
 
     return () => {
       lenis.destroy();
-      gsap.ticker.remove(lenis.raf);
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, [state3D, overlayRef]);
 

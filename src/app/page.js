@@ -18,9 +18,13 @@ export default function Home() {
 
   // Initialize 3D State Object that is animated by GSAP and read by Three.js
   const state3D = useRef({
-    cameraPos: { x: 0, y: 80, z: 100 },
-    cameraTarget: { x: 0, y: 0, z: 0 },
-    fogDensity: 0.003,
+    cameraPos: { x: 800, y: 1200, z: 2500 },
+    cameraTarget: { x: 800, y: -20, z: 400 },
+    fogDensity: 0.00008,   // Start near-zero — terrain must be visible from high altitude
+    mistDensity: 0.003,
+    rainIntensity: 0,
+    cloudColor: 1.0,
+    mountainHeight: 0.1,
     terrainGlow: 0,
     soilOpacity: 0,
     terrainOpacity: 1,
@@ -148,8 +152,8 @@ export default function Home() {
       <Header soundActive={soundActive} onToggleSound={toggleSound} />
 
       {/* Scroll Spacer in normal document flow to create scroll depth */}
-      {/* 2800vh gives breathing room for 10 cinematic premium scenes */}
-      <div className="scroll-spacer" style={{ height: '2800vh', width: '100%', pointerEvents: 'none' }} />
+      {/* 4500vh gives breathing room for the extended scrollytelling sequences */}
+      <div className="scroll-spacer" style={{ height: '4500vh', width: '100%', pointerEvents: 'none' }} />
       
       <Footer />
 

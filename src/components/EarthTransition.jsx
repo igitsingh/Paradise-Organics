@@ -46,8 +46,8 @@ function createSoilTexture() {
   }
 
   // 4. Gold Curcumin veins (emissive highlights mapping to turmeric traces in Meghalaya)
-  ctx.strokeStyle = '#ffd700';
-  ctx.shadowColor = '#ff8c00';
+  ctx.strokeStyle = '#BF930F';
+  ctx.shadowColor = '#BF930F';
   ctx.lineWidth = 3;
   ctx.globalAlpha = 0.5;
   for (let v = 0; v < 12; v++) {
@@ -76,9 +76,9 @@ function createParticleTexture() {
   canvas.height = 32;
   const ctx = canvas.getContext('2d');
   const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-  grad.addColorStop(0, 'rgba(255, 223, 77, 1.0)');
-  grad.addColorStop(0.3, 'rgba(179, 138, 61, 0.6)');
-  grad.addColorStop(1, 'rgba(179, 138, 61, 0.0)');
+  grad.addColorStop(0, 'rgba(191, 147, 15, 1.0)');
+  grad.addColorStop(0.3, 'rgba(191, 147, 15, 0.6)');
+  grad.addColorStop(1, 'rgba(191, 147, 15, 0.0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 32, 32);
   return new THREE.CanvasTexture(canvas);
@@ -212,7 +212,7 @@ export default function EarthTransition({ state3D }) {
         <mesh position={[0, -5, 0]} rotation={[0, 0, 0]}>
           <cylinderGeometry args={[0.3, 4.0, 14, 32, 1, true]} />
           <meshBasicMaterial
-            color="#B38A3D"
+            color="#BF930F"
             transparent
             opacity={0.2}
             side={THREE.DoubleSide}
@@ -233,7 +233,7 @@ export default function EarthTransition({ state3D }) {
         {particleTexture && (
           <pointsMaterial
             map={particleTexture}
-            color="#ffd700"
+            color="#BF930F"
             size={0.18}
             sizeAttenuation={true}
             transparent

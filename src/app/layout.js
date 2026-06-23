@@ -1,4 +1,5 @@
 import { Cormorant_Garamond, Outfit } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import CookieBanner from "@/components/CookieBanner";
 
@@ -13,6 +14,11 @@ const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "600", "700"],
+});
+
+const aachen = localFont({
+  src: '../../public/fonts/Aachen.ttf',
+  variable: '--font-aachen',
 });
 
 export const viewport = {
@@ -35,7 +41,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${outfit.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${outfit.variable} ${aachen.variable}`}>
       <body>
         {children}
         <CookieBanner />

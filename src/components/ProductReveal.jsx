@@ -47,8 +47,8 @@ function createCanisterTexture() {
 
   // 3. Golden Mountain base/powder
   const goldGrad = ctx.createLinearGradient(0, canvas.height - 80, 0, canvas.height);
-  goldGrad.addColorStop(0, '#b8860b'); // Gold
-  goldGrad.addColorStop(1, '#664d06'); // Dark Gold
+  goldGrad.addColorStop(0, '#BF930F'); // Gold
+  goldGrad.addColorStop(1, '#8A6805'); // Dark Gold
   ctx.fillStyle = goldGrad;
   ctx.beginPath();
   ctx.moveTo(0, canvas.height);
@@ -76,7 +76,7 @@ function createCanisterTexture() {
   ctx.fillText('PRESENTS', canvas.width / 2, 130);
 
   // Main Title
-  ctx.fillStyle = '#d4af37'; // Shiny gold
+  ctx.fillStyle = '#D4A822'; // Shiny gold
   ctx.font = 'normal 56px "Georgia", serif';
   ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
   ctx.shadowBlur = 10;
@@ -86,7 +86,7 @@ function createCanisterTexture() {
   ctx.shadowOffsetY = 0;
 
   // Origin
-  ctx.fillStyle = 'rgba(212, 175, 55, 0.8)';
+  ctx.fillStyle = 'rgba(191, 147, 15, 0.8)';
   ctx.font = 'normal 20px "Georgia", serif';
   ctx.letterSpacing = '8px';
   ctx.fillText('MEGHALAYA HIGHLANDS', canvas.width / 2, 260);
@@ -103,7 +103,7 @@ function createCanisterTexture() {
   ctx.save();
   ctx.translate(100, canvas.height / 2);
   ctx.rotate(-Math.PI / 2);
-  ctx.fillStyle = 'rgba(212, 175, 55, 0.6)';
+  ctx.fillStyle = 'rgba(191, 147, 15, 0.6)';
   ctx.font = 'normal 24px "Georgia", serif';
   ctx.letterSpacing = '6px';
   ctx.fillText('THE GOLDEN ROOT', 0, 0);
@@ -140,9 +140,9 @@ function createSparkTexture() {
   canvas.height = 32;
   const ctx = canvas.getContext('2d');
   const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-  grad.addColorStop(0, 'rgba(255, 215, 0, 1.0)'); // central gold
-  grad.addColorStop(0.25, 'rgba(179, 138, 61, 0.7)');
-  grad.addColorStop(1, 'rgba(179, 138, 61, 0.0)');
+  grad.addColorStop(0, 'rgba(191, 147, 15, 1.0)'); // central gold
+  grad.addColorStop(0.25, 'rgba(191, 147, 15, 0.7)');
+  grad.addColorStop(1, 'rgba(191, 147, 15, 0.0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 32, 32);
   return new THREE.CanvasTexture(canvas);
@@ -267,7 +267,7 @@ export default function ProductReveal({ state3D }) {
           <mesh ref={lidBaseRef} castShadow>
             <cylinderGeometry args={[0.62, 0.62, 0.15, 64]} />
             <meshStandardMaterial
-              color="#B38A3D"
+              color="#BF930F"
               roughness={0.15}
               metalness={0.95}
             />
@@ -275,7 +275,7 @@ export default function ProductReveal({ state3D }) {
           <mesh ref={lidTopRef} position={[0, 0.08, 0]}>
             <cylinderGeometry args={[0.59, 0.59, 0.05, 64]} />
             <meshStandardMaterial
-              color="#d4af37"
+              color="#D4A822"
               roughness={0.2}
               metalness={0.95}
             />
@@ -294,7 +294,7 @@ export default function ProductReveal({ state3D }) {
         {sparkTexture && (
           <pointsMaterial
             map={sparkTexture}
-            color="#ffd700"
+            color="#BF930F"
             size={0.12}
             sizeAttenuation={true}
             transparent

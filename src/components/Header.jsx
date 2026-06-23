@@ -3,9 +3,15 @@ import Link from 'next/link';
 
 export default function Header({ soundActive, onToggleSound }) {
   return (
-    <header className="brand-nav" style={{ background: onToggleSound ? 'linear-gradient(to bottom, rgba(14, 59, 46, 0.8) 0%, transparent 100%)' : '#0E3B2E' }}>
+    <header className="brand-nav" style={{ background: 'transparent' }}>
       <div className="brand-nav-left interactive">
-        <Link href="/" className="brand-nav-logo">Paradise Organics™</Link>
+        <Link href="/" className="brand-nav-logo" style={{ display: 'flex', alignItems: 'center' }}>
+          <img 
+            src="/images/PARADISE ORGANIC_TEMPLOGO.png" 
+            alt="Paradise Organics" 
+            style={{ height: '32px', width: 'auto' }} 
+          />
+        </Link>
       </div>
       
       <div className="brand-nav-center interactive">
