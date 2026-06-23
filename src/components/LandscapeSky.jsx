@@ -1,38 +1,7 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-
-// Create a soft volumetric cloud texture procedurally
-function createCloudTexture() {
-  if (typeof window === 'undefined') return null;
-  const canvas = document.createElement('canvas');
-  canvas.width = 256;
-  canvas.height = 256;
-  const ctx = canvas.getContext('2d');
-  
-  // Create a fluffy cloud shape by drawing multiple overlapping soft radial gradients
-  const drawPuff = (x, y, r, opacity) => {
-    const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
-    grad.addColorStop(0, `rgba(255, 255, 255, ${opacity})`);
-    grad.addColorStop(0.4, `rgba(245, 248, 246, ${opacity * 0.8})`);
-    grad.addColorStop(1, `rgba(220, 230, 225, 0.0)`);
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-  };
-
-  // Draw an elongated, multi-puff cloud shape for realistic feel
-  drawPuff(128, 128, 60, 0.9); // center puff
-  drawPuff(80, 140, 50, 0.8);  // left puff
-  drawPuff(176, 140, 50, 0.8); // right puff
-  drawPuff(100, 110, 45, 0.7); // top left puff
-  drawPuff(156, 110, 45, 0.7); // top right puff
-  drawPuff(50, 150, 35, 0.6);  // far left tail
-  drawPuff(206, 150, 35, 0.6); // far right tail
-
-  return new THREE.CanvasTexture(canvas);
-}
+import { useTexture, Clouds, Cloud } from '@react-three/drei';
 
 // Create a soft glowing dot texture for atmospheric gold spores
 function createDotTexture() {
@@ -50,67 +19,26 @@ function createDotTexture() {
   return new THREE.CanvasTexture(canvas);
 }
 
-// Create a procedural grass texture for the terrain
-function createGrassTexture() {
-  if (typeof window === 'undefined') return null;
-  const canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 512;
-  const ctx = canvas.getContext('2d');
-
-  // Base grass green (much brighter and richer)
-  ctx.fillStyle = '#1e4d2b';
-  ctx.fillRect(0, 0, 512, 512);
-
-  // Draw grass blades (top-down view)
-  for (let i = 0; i < 60000; i++) {
-    const x = Math.random() * 512;
-    const y = Math.random() * 512;
-    const length = 5 + Math.random() * 15;
-    const angle = Math.random() * Math.PI * 2;
-
-    const r = 20 + Math.random() * 20;
-    const g = 80 + Math.random() * 60;
-    const b = 30 + Math.random() * 30;
-    
-    ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.5 + Math.random() * 0.5})`;
-    ctx.lineWidth = 1.0 + Math.random() * 2.0;
-
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length);
-    ctx.stroke();
-  }
-
-  // Add subtle sunlight highlights to the grass
-  for (let i = 0; i < 5000; i++) {
-    const x = Math.random() * 512;
-    const y = Math.random() * 512;
-    ctx.fillStyle = 'rgba(150, 200, 100, 0.3)';
-    ctx.fillRect(x, y, 2, 2);
-  }
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(20, 20); // Tile it across the terrain
-  return texture;
-}
-
 export default function LandscapeSky({ state3D }) {
   const terrainRef = useRef();
   const bgTerrainRef = useRef();
-  const cloudsRef = useRef();
   const highlightRef = useRef();
   const sporesRef = useRef();
+  const cloudsGroupRef = useRef();
 
-  const cloudTexture = useMemo(() => createCloudTexture(), []);
   const dotTexture = useMemo(() => createDotTexture(), []);
-  const grassTexture = useMemo(() => createGrassTexture(), []);
+  
+  // Load the photorealistic terrain map
+  const terrainMap = useTexture('/images/terrain-map.png');
+  terrainMap.wrapS = THREE.RepeatWrapping;
+  terrainMap.wrapT = THREE.RepeatWrapping;
+  // Repeat the texture across the geometry
+  terrainMap.repeat.set(1.5, 1.5);
+  terrainMap.colorSpace = THREE.SRGBColorSpace;
 
-  // 1. Detailed Foreground Mountain Terrain (Smooth shading)
+  // 1. Detailed Foreground Mountain Terrain (Displaced 3D mesh mapped with realistic texture)
   const terrainGeometry = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(280, 280, 120, 120);
+    const geo = new THREE.PlaneGeometry(300, 300, 200, 200);
     const pos = geo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
@@ -133,9 +61,9 @@ export default function LandscapeSky({ state3D }) {
     return geo;
   }, []);
 
-  // 2. Distant Background Mountain Range for Layered Horizon Depth
+  // 2. Distant Background Mountain Range
   const bgTerrainGeometry = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(500, 500, 60, 60);
+    const geo = new THREE.PlaneGeometry(600, 600, 60, 60);
     const pos = geo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
@@ -149,24 +77,7 @@ export default function LandscapeSky({ state3D }) {
     return geo;
   }, []);
 
-  // 3. Clouds coordinates & size settings
-  const cloudsData = useMemo(() => {
-    const data = [];
-    for (let i = 0; i < 30; i++) {
-      data.push({
-        position: [
-          (Math.random() - 0.5) * 220,
-          25 + Math.random() * 25,
-          (Math.random() - 0.5) * 220
-        ],
-        scale: 25 + Math.random() * 30,
-        speed: 0.02 + Math.random() * 0.04
-      });
-    }
-    return data;
-  }, []);
-
-  // 4. Gold spores floating above the field (magical atmospheric particles)
+  // 3. Gold spores floating above the field (magical atmospheric particles)
   const [sporePositions, sporeSpeeds] = useMemo(() => {
     const count = 150;
     const positions = new Float32Array(count * 3);
@@ -200,24 +111,23 @@ export default function LandscapeSky({ state3D }) {
 
     // 2. Fade background terrain
     if (bgTerrainRef.current) {
-      bgTerrainRef.current.material.opacity = opacity * 0.6; // keep distant horizon slightly mistier
+      bgTerrainRef.current.material.opacity = opacity * 0.6; // keep distant horizon misty
       bgTerrainRef.current.material.transparent = true;
       bgTerrainRef.current.visible = opacity > 0.001;
     }
 
-    // 3. Animate clouds (slow drifting and wrap)
-    if (cloudsRef.current && opacity > 0.001) {
-      cloudsRef.current.children.forEach((cloud, idx) => {
-        const data = cloudsData[idx];
-        cloud.position.x += data.speed * 0.15;
-        if (cloud.position.x > 120) cloud.position.x = -120;
-        
-        cloud.material.opacity = opacity * 0.35;
+    // 2b. Fade clouds
+    if (cloudsGroupRef.current) {
+      cloudsGroupRef.current.traverse((child) => {
+        if (child.isMesh && child.material) {
+          child.material.transparent = true;
+          child.material.opacity = opacity * 0.8;
+        }
       });
-      cloudsRef.current.visible = opacity > 0.001;
+      cloudsGroupRef.current.visible = opacity > 0.001;
     }
 
-    // 4. Animate highlighted field glow circle
+    // 3. Animate highlighted field glow circle
     if (highlightRef.current && opacity > 0.001) {
       const pulse = 1.0 + Math.sin(elapsedTime * 2.5) * 0.08;
       highlightRef.current.scale.set(pulse, pulse, pulse);
@@ -226,7 +136,7 @@ export default function LandscapeSky({ state3D }) {
       highlightRef.current.visible = opacity > 0.001;
     }
 
-    // 5. Animate gold spores drift
+    // 4. Animate gold spores drift
     if (sporesRef.current && opacity > 0.001) {
       const posAttr = sporesRef.current.geometry.attributes.position;
       const count = posAttr.count;
@@ -263,10 +173,9 @@ export default function LandscapeSky({ state3D }) {
         castShadow
       >
         <meshStandardMaterial
-          color="#ffffff" // White base so the texture colors shine through perfectly
-          map={grassTexture}
+          map={terrainMap}
           roughness={0.9}
-          metalness={0.0}
+          metalness={0.1}
         />
       </mesh>
 
@@ -275,12 +184,12 @@ export default function LandscapeSky({ state3D }) {
         ref={bgTerrainRef}
         geometry={bgTerrainGeometry}
         rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -8, -120]}
+        position={[0, -8, -150]}
         receiveShadow
       >
         <meshStandardMaterial
-          color="#011b12" // darker green blending with deep fog
-          roughness={0.95}
+          map={terrainMap}
+          roughness={1.0}
           metalness={0.0}
         />
       </mesh>
@@ -301,22 +210,7 @@ export default function LandscapeSky({ state3D }) {
         />
       </mesh>
 
-      {/* 4. SOFT VOLUMETRIC CLOUD SPRITES */}
-      <group ref={cloudsRef}>
-        {cloudTexture && cloudsData.map((cloud, index) => (
-          <sprite key={index} position={cloud.position} scale={[cloud.scale, cloud.scale, 1]}>
-            <spriteMaterial
-              map={cloudTexture}
-              transparent
-              opacity={0}
-              depthWrite={false}
-              blending={THREE.NormalBlending}
-            />
-          </sprite>
-        ))}
-      </group>
-
-      {/* 5. ATMOSPHERIC GOLD SPORES (above the highlighted field) */}
+      {/* 4. ATMOSPHERIC GOLD SPORES */}
       <points ref={sporesRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -336,6 +230,18 @@ export default function LandscapeSky({ state3D }) {
           />
         )}
       </points>
+
+      {/* 5. VOLUMETRIC REAL CLOUDS (High Altitude Atmosphere) */}
+      <group ref={cloudsGroupRef} position={[0, 180, 150]}>
+        <Clouds material={THREE.MeshBasicMaterial}>
+          {/* Dense core layer covering the initial camera view */}
+          <Cloud seed={1} segments={80} bounds={[200, 30, 150]} volume={120} color="#ffffff" speed={0.1} position={[0, 0, 0]} />
+          <Cloud seed={2} segments={60} bounds={[150, 40, 100]} volume={100} color="#f4f6f0" speed={0.15} position={[50, -10, 20]} />
+          <Cloud seed={3} segments={60} bounds={[150, 30, 100]} volume={100} color="#f4f6f0" speed={0.15} position={[-50, 10, 10]} />
+          {/* Lower atmospheric clouds closer to the terrain */}
+          <Cloud seed={4} segments={50} bounds={[120, 20, 120]} volume={80} color="#ffffff" speed={0.05} position={[0, -40, -40]} />
+        </Clouds>
+      </group>
     </group>
   );
 }

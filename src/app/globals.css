@@ -2,6 +2,34 @@
    CSS Design System — Paradise Organics
    CINEMATIC EDITION — 3–8 words. Nothing more.
 ═══════════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: 'Canela';
+  src: url('/FONTS/Canela_Collection/Canela\ Family/Canela-Light-Trial.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Canela';
+  src: url('/FONTS/Canela_Collection/Canela\ Family/Canela-Regular-Trial.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Canela';
+  src: url('/FONTS/Canela_Collection/Canela\ Family/Canela-Medium-Trial.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Canela';
+  src: url('/FONTS/Canela_Collection/Canela\ Family/Canela-Bold-Trial.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
 :root {
   --color-emerald-deep: #0E3B2E;
   --color-emerald-dark: #022014;
@@ -19,8 +47,8 @@
   --background: var(--color-emerald);
   --foreground: var(--color-ivory);
   
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Canela", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Canela", Georgia, serif;
   --font-mono: 'Courier New', 'Lucida Console', monospace;
 
   --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);

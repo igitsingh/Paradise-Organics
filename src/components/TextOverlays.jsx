@@ -80,13 +80,13 @@ const TextOverlays = forwardRef((props, ref) => {
         {/* ══════════════════════════════════════════════
             SECTION 5 — WHY ORIGIN MATTERS
         ══════════════════════════════════════════════ */}
-        <section id="scene-5" className="scroll-section cine-center">
-          <div className="scene-content" style={{ width: '100vw', height: '100vh', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <div className="c5-bg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, overflow: 'hidden' }}>
+        <section id="scene-5" className="scroll-section">
+          <div className="scene-content" style={{ width: '100vw', height: '100vh', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', paddingRight: '10vw' }}>
+            <div className="c5-bg" data-speed="-0.5" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, overflow: 'hidden' }}>
               <img src="/images/aerial-farm.jpg" alt="Aerial Farm" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
               <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(14, 59, 46, 0.4)' }} />
             </div>
-            <div className="cine-stack" style={{ textAlign: 'center', zIndex: 1, padding: '2rem', background: 'rgba(14, 59, 46, 0.7)', backdropFilter: 'blur(10px)', borderRadius: '4px', border: '1px solid rgba(179, 138, 61, 0.3)' }}>
+            <div className="cine-stack" data-speed="0.3" style={{ textAlign: 'center', zIndex: 1, padding: '3rem', background: 'rgba(14, 59, 46, 0.7)', backdropFilter: 'blur(10px)', borderRadius: '4px', border: '1px solid rgba(179, 138, 61, 0.3)', maxWidth: '500px' }}>
               <p className="cine-line c5-q1" style={{ fontSize: '2rem', color: 'rgba(245, 241, 232, 0.9)' }}>Wine has origin.</p>
               <p className="cine-line c5-q2" style={{ fontSize: '2rem', color: 'rgba(245, 241, 232, 0.9)' }}>Coffee has origin.</p>
               <p className="cine-line c5-q3" style={{ fontSize: '2rem', color: 'rgba(245, 241, 232, 0.9)' }}>Chocolate has origin.</p>
@@ -100,11 +100,11 @@ const TextOverlays = forwardRef((props, ref) => {
         ══════════════════════════════════════════════ */}
         <section id="scene-6" className="scroll-section cine-center">
           <div className="scene-content" style={{ width: '100vw', height: '100vh', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', paddingBottom: '10vh' }}>
-            <div className="c6-bg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, overflow: 'hidden' }}>
-              <img src="/images/farmer-holding-root.jpg" alt="Farmer holding turmeric root" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
+            <div className="c6-bg" data-speed="-0.4" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, overflow: 'hidden' }}>
+              <img src="/images/happy-indian-farmer-at-green-turmeric-agriculture-2026-03-09-05-22-20-utc.jpg" alt="Indian farmers at green turmeric agriculture" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
               <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to top, rgba(14, 59, 46, 0.9) 0%, transparent 60%)' }} />
             </div>
-            <div className="c6-text" style={{ textAlign: 'center', zIndex: 1, padding: '2rem' }}>
+            <div className="c6-text" data-speed="0.2" style={{ textAlign: 'center', zIndex: 1, padding: '2rem' }}>
               <p className="cine-line" style={{ fontSize: '4rem', color: '#F5F1E8', lineHeight: 1.1, textShadow: '0 4px 20px rgba(0,0,0,0.8)', margin: 0 }}>
                 Cultivated by generations.
               </p>

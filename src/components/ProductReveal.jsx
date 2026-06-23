@@ -2,8 +2,8 @@ import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// Create a high-res canvas texture for the jar label
-function createLabelTexture() {
+// Create a high-res canvas texture for the luxury canister
+function createCanisterTexture() {
   if (typeof window === 'undefined') return null;
 
   const canvas = document.createElement('canvas');
@@ -11,61 +11,126 @@ function createLabelTexture() {
   canvas.height = 512;
   const ctx = canvas.getContext('2d');
 
-  // Background color (warm premium ivory paper texture)
-  ctx.fillStyle = '#faf8f2';
+  // 1. Deep Emerald Green Background
+  ctx.fillStyle = '#06261c'; // Very dark, luxurious emerald
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Border lines (luxury gold double frame)
-  ctx.strokeStyle = '#b8860b';
-  ctx.lineWidth = 6;
-  ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
-  ctx.lineWidth = 2;
-  ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+  // 2. Mountain Silhouette at the bottom
+  ctx.fillStyle = '#0a3d2e'; // Slightly lighter emerald for distant mountains
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height);
+  ctx.lineTo(0, canvas.height - 100);
+  ctx.lineTo(150, canvas.height - 160);
+  ctx.lineTo(280, canvas.height - 80);
+  ctx.lineTo(400, canvas.height - 180);
+  ctx.lineTo(550, canvas.height - 120);
+  ctx.lineTo(700, canvas.height - 200);
+  ctx.lineTo(850, canvas.height - 100);
+  ctx.lineTo(1024, canvas.height - 150);
+  ctx.lineTo(1024, canvas.height);
+  ctx.fill();
 
-  // Layout Text
-  ctx.fillStyle = '#011c12'; // Deep luxury dark green text
+  ctx.fillStyle = '#11523f'; // Midground mountains
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height);
+  ctx.lineTo(0, canvas.height - 60);
+  ctx.lineTo(100, canvas.height - 100);
+  ctx.lineTo(250, canvas.height - 50);
+  ctx.lineTo(350, canvas.height - 120);
+  ctx.lineTo(500, canvas.height - 60);
+  ctx.lineTo(650, canvas.height - 150);
+  ctx.lineTo(800, canvas.height - 70);
+  ctx.lineTo(950, canvas.height - 110);
+  ctx.lineTo(1024, canvas.height - 60);
+  ctx.lineTo(1024, canvas.height);
+  ctx.fill();
+
+  // 3. Golden Mountain base/powder
+  const goldGrad = ctx.createLinearGradient(0, canvas.height - 80, 0, canvas.height);
+  goldGrad.addColorStop(0, '#b8860b'); // Gold
+  goldGrad.addColorStop(1, '#664d06'); // Dark Gold
+  ctx.fillStyle = goldGrad;
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height);
+  ctx.lineTo(0, canvas.height - 40);
+  ctx.lineTo(150, canvas.height - 80);
+  ctx.lineTo(300, canvas.height - 20);
+  ctx.lineTo(450, canvas.height - 70);
+  ctx.lineTo(600, canvas.height - 30);
+  ctx.lineTo(750, canvas.height - 90);
+  ctx.lineTo(900, canvas.height - 40);
+  ctx.lineTo(1024, canvas.height - 80);
+  ctx.lineTo(1024, canvas.height);
+  ctx.fill();
+
+  // 4. Typography
   ctx.textAlign = 'center';
 
-  // Brand Header
-  ctx.font = 'normal 38px Georgia, serif';
-  ctx.fillText('P A R A D I S E   O R G A N I C S', canvas.width / 2, 120);
+  // Brand Name
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+  ctx.font = 'normal 16px "Inter", sans-serif';
+  ctx.letterSpacing = '6px';
+  ctx.fillText('PARADISE ORGANICS', canvas.width / 2, 100);
 
-  // Monogram Logo (Circular gold border with PO monogram)
-  ctx.strokeStyle = '#b8860b';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, 205, 38, 0, Math.PI * 2);
-  ctx.stroke();
+  ctx.font = 'normal 12px "Inter", sans-serif';
+  ctx.fillText('PRESENTS', canvas.width / 2, 130);
 
-  ctx.fillStyle = '#b8860b';
-  ctx.font = 'normal 24px Georgia, serif';
-  ctx.fillText('P O', canvas.width / 2, 212);
+  // Main Title
+  ctx.fillStyle = '#d4af37'; // Shiny gold
+  ctx.font = 'normal 56px "Georgia", serif';
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+  ctx.shadowBlur = 10;
+  ctx.shadowOffsetY = 2;
+  ctx.fillText('THE GOLDEN ROOT™', canvas.width / 2, 210);
+  ctx.shadowBlur = 0; // reset shadow
+  ctx.shadowOffsetY = 0;
 
-  // Product Name
-  ctx.fillStyle = '#011c12';
-  ctx.font = 'italic 34px Georgia, serif';
-  ctx.fillText('The Golden Root™', canvas.width / 2, 295);
+  // Origin
+  ctx.fillStyle = 'rgba(212, 175, 55, 0.8)';
+  ctx.font = 'normal 20px "Georgia", serif';
+  ctx.letterSpacing = '8px';
+  ctx.fillText('MEGHALAYA HIGHLANDS', canvas.width / 2, 260);
 
-  // Subtitle / Variety
-  ctx.font = 'normal 18px "Courier New", monospace';
-  ctx.fillStyle = '#444444';
-  ctx.fillText('PREMIUM LAKADONG VARIETY', canvas.width / 2, 350);
+  // Variety
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+  ctx.font = 'normal 14px "Inter", sans-serif';
+  ctx.letterSpacing = '4px';
+  ctx.fillText('LAKADONG VARIETY', canvas.width / 2, 310);
+  ctx.fillText('SINGLE ORIGIN INDIA', canvas.width / 2, 335);
 
-  // Properties / Origin info
-  ctx.font = 'bold 15px Arial, sans-serif';
-  ctx.fillStyle = '#b8860b';
-  ctx.fillText('SINGLE ORIGIN  •  MEGHALAYA HIGHLANDS  •  CURCUMIN VERIFIED', canvas.width / 2, 400);
+  // Side Panels (Spine & Back) - The front is in the center. We'll add text on the sides.
+  // Left side (Spine area roughly)
+  ctx.save();
+  ctx.translate(100, canvas.height / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = 'rgba(212, 175, 55, 0.6)';
+  ctx.font = 'normal 24px "Georgia", serif';
+  ctx.letterSpacing = '6px';
+  ctx.fillText('THE GOLDEN ROOT', 0, 0);
+  ctx.restore();
 
-  // Footer / Weight
-  ctx.font = 'italic 15px Georgia, serif';
-  ctx.fillStyle = '#777777';
-  ctx.fillText('Batch Allocation No: PO-LKD-026  •  Net Wt. 100g', canvas.width / 2, 450);
+  // Right side (Back area)
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+  ctx.font = 'normal 14px "Inter", sans-serif';
+  ctx.letterSpacing = '2px';
+  ctx.fillText('ANNUAL IMPACT', 850, 200);
+  
+  ctx.font = 'normal 12px "Inter", sans-serif';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+  ctx.fillText('45 Farmers Supported', 850, 230);
+  ctx.fillText('100% Traceable', 850, 250);
+  ctx.fillText('Premium Lakadong', 850, 270);
+  
+  // Barcode mock
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.fillRect(800, 320, 100, 50);
 
   const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
   texture.wrapS = THREE.RepeatWrapping;
-  texture.repeat.x = -1; // Flip mapping direction so it wraps clockwise
   return texture;
 }
+
 
 // Create soft particle dot texture for gathering particles
 function createSparkTexture() {
@@ -86,13 +151,23 @@ function createSparkTexture() {
 export default function ProductReveal({ state3D }) {
   const jarGroupRef = useRef();
   const labelRef = useRef();
-  const glassRef = useRef();
-  const powderRef = useRef();
-  const capBaseRef = useRef();
-  const capTopRef = useRef();
+  const canisterRef = useRef();
+  const lidBaseRef = useRef();
+  const lidTopRef = useRef();
   const gatheringParticlesRef = useRef();
 
-  const labelTexture = useMemo(() => createLabelTexture(), []);
+  const generatedCanisterTexture = useMemo(() => createCanisterTexture(), []);
+  
+  const canisterMaterials = useMemo(() => {
+    const goldCapColor = '#111111'; // Dark metal bottom
+
+    return [
+      new THREE.MeshStandardMaterial({ map: generatedCanisterTexture, roughness: 0.6, metalness: 0.1 }), // 0: Side label
+      new THREE.MeshStandardMaterial({ color: goldCapColor, roughness: 0.5, metalness: 0.8 }),     // 1: Top
+      new THREE.MeshStandardMaterial({ color: goldCapColor, roughness: 0.5, metalness: 0.8 })      // 2: Bottom
+    ];
+  }, [generatedCanisterTexture]);
+
   const sparkTexture = useMemo(() => createSparkTexture(), []);
 
   // 1. Swirling Gathering Powder Particles Data
@@ -139,26 +214,20 @@ export default function ProductReveal({ state3D }) {
       // Rotate based on ScrollTrigger value
       jarGroupRef.current.rotation.y = state3D.productRotation + Math.sin(elapsedTime * 0.15) * 0.04;
 
-      // Update opacities for standard/physical materials
-      if (glassRef.current && glassRef.current.material) {
-        glassRef.current.material.opacity = productOpacity * 0.85;
-        glassRef.current.material.transparent = true;
+      // Update opacities for the canister materials
+      if (canisterRef.current && Array.isArray(canisterRef.current.material)) {
+        canisterRef.current.material.forEach((mat) => {
+          mat.opacity = productOpacity;
+          mat.transparent = true;
+        });
       }
-      if (powderRef.current && powderRef.current.material) {
-        powderRef.current.material.opacity = productOpacity;
-        powderRef.current.material.transparent = true;
+      if (lidBaseRef.current && lidBaseRef.current.material) {
+        lidBaseRef.current.material.opacity = productOpacity;
+        lidBaseRef.current.material.transparent = true;
       }
-      if (labelRef.current && labelRef.current.material) {
-        labelRef.current.material.opacity = productOpacity;
-        labelRef.current.material.transparent = true;
-      }
-      if (capBaseRef.current && capBaseRef.current.material) {
-        capBaseRef.current.material.opacity = productOpacity;
-        capBaseRef.current.material.transparent = true;
-      }
-      if (capTopRef.current && capTopRef.current.material) {
-        capTopRef.current.material.opacity = productOpacity;
-        capTopRef.current.material.transparent = true;
+      if (lidTopRef.current && lidTopRef.current.material) {
+        lidTopRef.current.material.opacity = productOpacity;
+        lidTopRef.current.material.transparent = true;
       }
     }
 
@@ -185,64 +254,29 @@ export default function ProductReveal({ state3D }) {
 
   return (
     <group position={[0, -20, 0]}>
-      {/* 3D APOTHECARY JAR GROUP */}
+      {/* 3D CYLINDRICAL LUXURY CANISTER */}
       <group ref={jarGroupRef}>
+        {/* Main Body */}
+        <mesh ref={canisterRef} material={canisterMaterials} castShadow receiveShadow>
+          {/* Cylinder mathematically proportioned to map the 1.5 aspect ratio image around the circumference without distortion */}
+          <cylinderGeometry args={[0.6, 0.6, 2.4, 64]} />
+        </mesh>
         
-        {/* Transparent emerald glass container (High reflective finish) */}
-        <mesh ref={glassRef} castShadow receiveShadow>
-          <cylinderGeometry args={[1.0, 1.0, 2.2, 32, 1, false]} />
-          <meshPhysicalMaterial
-            color="#012417" // deep luxury emerald glass
-            roughness={0.02} // highly glossy
-            metalness={0.1}
-            transmission={0.92} // translucent refraction
-            thickness={1.2}     // heavy glass base simulation
-            ior={1.52}          // index of refraction for thick glass
-            clearcoat={1.0}     // high specular reflection coat
-            clearcoatRoughness={0.01}
-          />
-        </mesh>
-
-        {/* Golden Turmeric Powder inside the jar */}
-        <mesh ref={powderRef} position={[0, -0.15, 0]}>
-          <cylinderGeometry args={[0.94, 0.94, 1.7, 32]} />
-          <meshStandardMaterial
-            color="#df8b10" // vibrant curcumin gold/orange powder
-            roughness={0.95}
-            metalness={0.0}
-          />
-        </mesh>
-
-        {/* Textured Luxury Paper Label */}
-        {labelTexture && (
-          <mesh ref={labelRef} position={[0, -0.1, 0]}>
-            <cylinderGeometry args={[1.02, 1.02, 1.3, 32, 1, true]} />
-            <meshStandardMaterial
-              map={labelTexture}
-              roughness={0.9}
-              metalness={0.0}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        )}
-
-        {/* Custom Milled Gold Lid (Layered cylinders) */}
-        <group>
-          {/* Cap Base */}
-          <mesh ref={capBaseRef} position={[0, 1.2, 0]} castShadow>
-            <cylinderGeometry args={[1.03, 1.03, 0.2, 32]} />
+        {/* Premium Golden Lid */}
+        <group position={[0, 1.25, 0]}>
+          <mesh ref={lidBaseRef} castShadow>
+            <cylinderGeometry args={[0.62, 0.62, 0.15, 64]} />
             <meshStandardMaterial
               color="#B38A3D"
               roughness={0.15}
               metalness={0.95}
             />
           </mesh>
-          {/* Cap Top */}
-          <mesh ref={capTopRef} position={[0, 1.32, 0]}>
-            <cylinderGeometry args={[0.98, 0.98, 0.08, 32]} />
+          <mesh ref={lidTopRef} position={[0, 0.08, 0]}>
+            <cylinderGeometry args={[0.59, 0.59, 0.05, 64]} />
             <meshStandardMaterial
               color="#d4af37"
-              roughness={0.18}
+              roughness={0.2}
               metalness={0.95}
             />
           </mesh>

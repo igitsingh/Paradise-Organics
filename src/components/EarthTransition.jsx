@@ -182,41 +182,17 @@ export default function EarthTransition({ state3D }) {
   return (
     <group ref={groupRef}>
       
-      {/* 1. DIRT TRENCH WALLS (three-sided box enclosing the camera descent) */}
-      <group>
-        {/* Back Wall */}
-        <mesh position={[0, -8, -3.5]} receiveShadow userData={{ baseOpacity: 1.0 }}>
-          <planeGeometry args={[14, 18]} />
-          <meshStandardMaterial
-            map={soilTexture}
-            roughness={0.9}
-            metalness={0.0}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-
-        {/* Left Wall */}
-        <mesh position={[-3.5, -8, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow userData={{ baseOpacity: 1.0 }}>
-          <planeGeometry args={[10, 18]} />
-          <meshStandardMaterial
-            map={soilTexture}
-            roughness={0.9}
-            metalness={0.0}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-
-        {/* Right Wall */}
-        <mesh position={[3.5, -8, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow userData={{ baseOpacity: 1.0 }}>
-          <planeGeometry args={[10, 18]} />
-          <meshStandardMaterial
-            map={soilTexture}
-            roughness={0.9}
-            metalness={0.0}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-      </group>
+      {/* 1. DIRT TRENCH SHAFT (organic circular well enclosing the descent) */}
+      <mesh position={[0, -16, 0]} receiveShadow userData={{ baseOpacity: 1.0 }}>
+        {/* radiusTop, radiusBottom, height, radialSegments, heightSegments, openEnded */}
+        <cylinderGeometry args={[8, 5, 32, 32, 1, true]} />
+        <meshStandardMaterial
+          map={soilTexture}
+          roughness={1.0}
+          metalness={0.0}
+          side={THREE.BackSide} // View from inside the cylinder
+        />
+      </mesh>
 
       {/* 2. HANGING ORGANIC ROOT FIBERS */}
       <group position={[0, 0, 0]}>

@@ -2,11 +2,13 @@ import React, { Suspense, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
+import { Stars } from '@react-three/drei';
 
 import LandscapeSky from './LandscapeSky';
 import EarthTransition from './EarthTransition';
 import GoldenRoot from './GoldenRoot';
 import ProductReveal from './ProductReveal';
+import AtmosphereParticles from './AtmosphereParticles';
 
 // Smooth camera motion controller
 function CameraRig({ state3D }) {
@@ -91,6 +93,14 @@ export default function SceneContainer({ state3D }) {
           color="#C68A2D"
           distance={12}
         />
+
+        {/* Enhanced Atmosphere Effects */}
+        {/* Removed Stars and Meghalaya Mist as they looked like snow/confusing particles */}
+
+        {/* Golden Pollen Particles (Visible in Root & Product Scenes) */}
+        <group position={[0, -15, 0]}>
+          <AtmosphereParticles count={200} color="#C68A2D" size={0.08} speed={0.4} spread={20} opacity={state3D.rootOpacity * 0.8 + state3D.productOpacity * 0.5} />
+        </group>
 
         {/* R3F components for each step of the journey */}
         <Suspense fallback={null}>
