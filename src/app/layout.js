@@ -17,7 +17,7 @@ const outfit = Outfit({
 });
 
 const aachen = localFont({
-  src: '../../public/fonts/Aachen.ttf',
+  src: '../../public/FONTS/Aachen.ttf',
   variable: '--font-aachen',
 });
 
