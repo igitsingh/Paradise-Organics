@@ -32,6 +32,8 @@ export default function ScrollController({ state3D, overlayRef }) {
     state3D.cameraTarget.x = targetSurface.x;
     state3D.cameraTarget.y = targetSurface.y;
     state3D.cameraTarget.z = targetSurface.z;
+    state3D.dofFocalLength = 0.02;
+    state3D.dofBokehScale = 0.5;
 
     // ─── Lenis ───────────────────────────────────────────────
     const lenis = new Lenis({
@@ -135,6 +137,7 @@ export default function ScrollController({ state3D, overlayRef }) {
     // 0 - 10: Dive through clouds, reveal Origin Matters
     tl.to(state3D.cameraPos, { ...camS2, duration: 10, ease: 'power2.inOut' }, 0)
       .to(state3D, { fogDensity: 0.0001, duration: 8 }, 0)
+      .to(state3D, { dofFocalLength: 0.02, dofBokehScale: 0.5, duration: 5 }, 0)
       .to(state3D, { terrainGlow: 0.8, duration: 8 }, 2)
       .to(c1Headline, { opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5 }, 2)
       .to(c1Sub, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5 }, 2.5)
@@ -158,11 +161,13 @@ export default function ScrollController({ state3D, overlayRef }) {
 
       // 4. Hover over the one main glowing circle
       .to(state3D.cameraPos, { ...camS4, duration: 8, ease: 'power2.inOut' }, 15)
+      .to(state3D, { dofFocalLength: 0.08, dofBokehScale: 2.2, duration: 8 }, 15)
 
       // 5. Dive underground
       .to(state3D, { terrainOpacity: 0, duration: 2 }, 24)
       .to(state3D.cameraPos, { ...camS5, duration: 5, ease: 'power3.inOut' }, 24)
       .to(state3D.cameraTarget, { ...targetRoot, duration: 5, ease: 'power3.inOut' }, 24)
+      .to(state3D, { dofFocalLength: 0.12, dofBokehScale: 4.0, duration: 5 }, 24)
       .to(sections[0], { opacity: 0, y: -30, duration: 2 }, 28);
 
     // 30 - 40: S3 Golden Root sequence (Origin -> Product)
@@ -192,7 +197,8 @@ export default function ScrollController({ state3D, overlayRef }) {
       // Powder forms into jar (37-40)
       .to(state3D, { powderSwirl: 0, productOpacity: 1, duration: 3 }, 37)
       .to(state3D.cameraPos, { ...camFinal, duration: 3, ease: 'power2.inOut' }, 37)
-      .to(state3D.cameraTarget, { ...targetProduct, duration: 3 }, 37);
+      .to(state3D.cameraTarget, { ...targetProduct, duration: 3 }, 37)
+      .to(state3D, { dofFocalLength: 0.08, dofBokehScale: 3.0, duration: 3 }, 37);
 
     // 40 - 50: S4 Proof & Transparency (Apple style)
     tl.to(sections[2], { opacity: 1, duration: 1 }, 42)
@@ -213,6 +219,7 @@ export default function ScrollController({ state3D, overlayRef }) {
       .to(c6bg, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 3, ease: 'power2.out' }, 61)
       .to(c6text, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }, 62)
       .to(state3D, { productRotation: Math.PI * 0.5, duration: 9, ease: 'none' }, 61)
+      .to(state3D, { dofFocalLength: 0.06, dofBokehScale: 2.2, duration: 4 }, 61)
       .to(sections[4], { opacity: 0, duration: 1.5 }, 68);
 
     // 70 - 80: S7 Importers (Sleek card layout)

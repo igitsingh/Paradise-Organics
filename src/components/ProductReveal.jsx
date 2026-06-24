@@ -1,6 +1,7 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 // Create a high-res canvas texture for the luxury canister
 function createCanisterTexture() {
@@ -156,6 +157,29 @@ export default function ProductReveal({ state3D }) {
   const lidTopRef = useRef();
   const gatheringParticlesRef = useRef();
 
+  const [gltfModel, setGltfModel] = useState(null);
+
+  useEffect(() => {
+    const loader = new GLTFLoader();
+    loader.load(
+      '/assets/luxury_canister.glb',
+      (gltf) => {
+        gltf.scene.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
+        setGltfModel(gltf.scene);
+      },
+      undefined,
+      (error) => {
+        console.warn('Failed to load luxury_canister.glb, using high-fidelity glass procedural fallback:', error);
+        setGltfModel(null);
+      }
+    );
+  }, []);
+
   const generatedCanisterTexture = useMemo(() => createCanisterTexture(), []);
   
   const canisterMaterials = useMemo(() => {
@@ -214,13 +238,33 @@ export default function ProductReveal({ state3D }) {
       // Rotate based on ScrollTrigger value
       jarGroupRef.current.rotation.y = state3D.productRotation + Math.sin(elapsedTime * 0.15) * 0.04;
 
-      // Update opacities for the canister materials
-      if (canisterRef.current && Array.isArray(canisterRef.current.material)) {
-        canisterRef.current.material.forEach((mat) => {
-          mat.opacity = productOpacity;
-          mat.transparent = true;
+      if (gltfModel) {
+        gltfModel.traverse((child) => {
+          if (child.isMesh && child.material) {
+            child.material.transparent = true;
+            child.material.opacity = productOpacity;
+          }
         });
       }
+
+      // Update opacities for the canister materials (used in fallback)
+      if (canisterRef.current) {
+        if (Array.isArray(canisterRef.current.material)) {
+          canisterRef.current.material.forEach((mat) => {
+            mat.opacity = productOpacity;
+            mat.transparent = true;
+          });
+        } else if (canisterRef.current.material) {
+          canisterRef.current.material.opacity = productOpacity;
+          canisterRef.current.material.transparent = true;
+        }
+      }
+      
+      if (labelRef.current && labelRef.current.material) {
+        labelRef.current.material.opacity = productOpacity;
+        labelRef.current.material.transparent = true;
+      }
+      
       if (lidBaseRef.current && lidBaseRef.current.material) {
         lidBaseRef.current.material.opacity = productOpacity;
         lidBaseRef.current.material.transparent = true;
@@ -256,31 +300,70 @@ export default function ProductReveal({ state3D }) {
     <group position={[0, -20, 0]}>
       {/* 3D CYLINDRICAL LUXURY CANISTER */}
       <group ref={jarGroupRef}>
-        {/* Main Body */}
-        <mesh ref={canisterRef} material={canisterMaterials} castShadow receiveShadow>
-          {/* Cylinder mathematically proportioned to map the 1.5 aspect ratio image around the circumference without distortion */}
-          <cylinderGeometry args={[0.6, 0.6, 2.4, 64]} />
-        </mesh>
-        
-        {/* Premium Golden Lid */}
-        <group position={[0, 1.25, 0]}>
-          <mesh ref={lidBaseRef} castShadow>
-            <cylinderGeometry args={[0.62, 0.62, 0.15, 64]} />
-            <meshStandardMaterial
-              color="#BF930F"
-              roughness={0.15}
-              metalness={0.95}
-            />
-          </mesh>
-          <mesh ref={lidTopRef} position={[0, 0.08, 0]}>
-            <cylinderGeometry args={[0.59, 0.59, 0.05, 64]} />
-            <meshStandardMaterial
-              color="#D4A822"
-              roughness={0.2}
-              metalness={0.95}
-            />
-          </mesh>
-        </group>
+        {gltfModel ? (
+          <primitive object={gltfModel} />
+        ) : (
+          <>
+            {/* Outer Refractive Glass Shell */}
+            <mesh ref={canisterRef} castShadow receiveShadow>
+              <cylinderGeometry args={[0.61, 0.61, 2.42, 64, 1, true]} />
+              <meshPhysicalMaterial
+                transmission={1.0}
+                thickness={0.06}
+                roughness={0.05}
+                clearcoat={1.0}
+                clearcoatRoughness={0.05}
+                ior={1.52}
+                color="#e5f5f0"
+                transparent
+              />
+            </mesh>
+
+            {/* Inner Printed Label Core */}
+            <mesh ref={labelRef} castShadow>
+              <cylinderGeometry args={[0.58, 0.58, 2.38, 64]} />
+              <meshStandardMaterial
+                map={generatedCanisterTexture}
+                roughness={0.4}
+                metalness={0.1}
+                transparent
+              />
+            </mesh>
+
+            {/* Gold Metal Base Accent */}
+            <mesh position={[0, -1.2, 0]} castShadow>
+              <cylinderGeometry args={[0.61, 0.61, 0.05, 64]} />
+              <meshPhysicalMaterial
+                color="#BF930F"
+                roughness={0.15}
+                metalness={0.95}
+                transparent
+              />
+            </mesh>
+            
+            {/* Premium Golden Lid */}
+            <group position={[0, 1.25, 0]}>
+              <mesh ref={lidBaseRef} castShadow>
+                <cylinderGeometry args={[0.62, 0.62, 0.15, 64]} />
+                <meshPhysicalMaterial
+                  color="#BF930F"
+                  roughness={0.15}
+                  metalness={0.95}
+                  transparent
+                />
+              </mesh>
+              <mesh ref={lidTopRef} position={[0, 0.08, 0]}>
+                <cylinderGeometry args={[0.59, 0.59, 0.05, 64]} />
+                <meshPhysicalMaterial
+                  color="#D4A822"
+                  roughness={0.2}
+                  metalness={0.95}
+                  transparent
+                />
+              </mesh>
+            </group>
+          </>
+        )}
       </group>
 
       {/* SWIRLING GATHERING PARTICLES */}

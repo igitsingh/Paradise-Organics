@@ -1,6 +1,7 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 // Create procedural texture for the root skin/bark
 function createRootSkinTexture() {
@@ -110,6 +111,31 @@ export default function GoldenRoot({ state3D }) {
   const rootMeshRef = useRef();
   const cutFaceRef = useRef();
   const powderParticlesRef = useRef();
+  
+  const [gltfModel, setGltfModel] = useState(null);
+
+  useEffect(() => {
+    const loader = new GLTFLoader();
+    loader.load(
+      '/assets/turmeric_root.glb',
+      (gltf) => {
+        // Enable shadows on the loaded model
+        gltf.scene.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
+        setGltfModel(gltf.scene);
+      },
+      undefined,
+      (error) => {
+        // Graceful fallback if asset doesn't exist yet
+        console.warn('Failed to load turmeric_root.glb, using high-fidelity procedural fallback:', error);
+        setGltfModel(null);
+      }
+    );
+  }, []);
 
   const skinTexture = useMemo(() => createRootSkinTexture(), []);
   const cutTexture = useMemo(() => createRootCutTexture(), []);
@@ -182,6 +208,18 @@ export default function GoldenRoot({ state3D }) {
       // Slow showcase rotation
       rootGroupRef.current.rotation.y = elapsedTime * 0.3;
 
+      if (gltfModel) {
+        gltfModel.traverse((child) => {
+          if (child.isMesh && child.material) {
+            child.material.transparent = true;
+            child.material.opacity = opacity * (1.0 - dissolve);
+            if (child.material.emissive) {
+              child.material.emissiveIntensity = (2.0 + Math.sin(elapsedTime * 3.5) * 0.6) * opacity * (1.0 - dissolve);
+            }
+          }
+        });
+      }
+
       if (rootMeshRef.current && rootMeshRef.current.material) {
         rootMeshRef.current.material.opacity = opacity * (1.0 - dissolve);
         rootMeshRef.current.material.transparent = true;
@@ -231,48 +269,58 @@ export default function GoldenRoot({ state3D }) {
       
       {/* 3D ORGANIC TURMERIC ROOT */}
       <group ref={rootGroupRef}>
-        
-        {/* Wrinkled skin/bark */}
-        <mesh ref={rootMeshRef} geometry={rootGeometry} castShadow receiveShadow>
-          <meshStandardMaterial
-            map={skinTexture}
-            roughness={0.95}
-            metalness={0.0}
-            bumpScale={0.12}
-          />
-        </mesh>
+        {gltfModel ? (
+          <primitive object={gltfModel} />
+        ) : (
+          <>
+            {/* Wrinkled skin/bark with luxury physically based material */}
+            <mesh ref={rootMeshRef} geometry={rootGeometry} castShadow receiveShadow>
+              <meshPhysicalMaterial
+                map={skinTexture}
+                roughness={0.9}
+                metalness={0.1}
+                bumpScale={0.15}
+                clearcoat={0.1}
+                clearcoatRoughness={0.8}
+              />
+            </mesh>
 
-        {/* Sliced glowing curcumin core */}
-        <mesh
-          ref={cutFaceRef}
-          position={[0, 1.6, 0]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          receiveShadow
-        >
-          <circleGeometry args={[0.7, 32]} />
-          <meshStandardMaterial
-            map={cutTexture}
-            color="#ffffff"
-            emissive="#BF930F"
-            emissiveIntensity={2.0}
-            roughness={0.2}
-            metalness={0.6}
-          />
-        </mesh>
+            {/* Sliced glowing curcumin core with slight translucent look */}
+            <mesh
+              ref={cutFaceRef}
+              position={[0, 1.6, 0]}
+              rotation={[-Math.PI / 2, 0, 0]}
+              receiveShadow
+            >
+              <circleGeometry args={[0.7, 32]} />
+              <meshPhysicalMaterial
+                map={cutTexture}
+                color="#ffffff"
+                emissive="#BF930F"
+                emissiveIntensity={2.0}
+                roughness={0.25}
+                metalness={0.3}
+                clearcoat={0.4}
+                transmission={0.25}
+                thickness={0.5}
+              />
+            </mesh>
 
-        {/* Closed bottom cap */}
-        <mesh
-          position={[0, -1.6, 0]}
-          rotation={[Math.PI / 2, 0, 0]}
-          receiveShadow
-        >
-          <circleGeometry args={[0.5, 32]} />
-          <meshStandardMaterial
-            map={skinTexture}
-            roughness={0.95}
-            metalness={0.0}
-          />
-        </mesh>
+            {/* Closed bottom cap */}
+            <mesh
+              position={[0, -1.6, 0]}
+              rotation={[Math.PI / 2, 0, 0]}
+              receiveShadow
+            >
+              <circleGeometry args={[0.5, 32]} />
+              <meshPhysicalMaterial
+                map={skinTexture}
+                roughness={0.9}
+                metalness={0.1}
+              />
+            </mesh>
+          </>
+        )}
       </group>
 
       {/* SWIRLING GOLD SPARKS DUST */}

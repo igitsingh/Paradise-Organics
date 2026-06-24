@@ -1,8 +1,8 @@
 import React, { Suspense, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, Vignette, DepthOfField } from '@react-three/postprocessing';
 import * as THREE from 'three';
-import { Stars } from '@react-three/drei';
+import { Stars, Environment } from '@react-three/drei';
 
 import LandscapeSky from './LandscapeSky';
 import EarthTransition from './EarthTransition';
@@ -44,7 +44,32 @@ function SceneEffectsController({ state3D }) {
   return null;
 }
 
+// Controller to dynamically animate Camera focus/DOF parameters
+function PostProcessingController({ state3D, dofRef }) {
+  useFrame(({ camera }) => {
+    if (dofRef.current) {
+      const tTarget = state3D.cameraTarget;
+      
+      // Update DOF focal point target
+      if (dofRef.current.target) {
+        dofRef.current.target.x = THREE.MathUtils.lerp(dofRef.current.target.x, tTarget.x, 0.05);
+        dofRef.current.target.y = THREE.MathUtils.lerp(dofRef.current.target.y, tTarget.y, 0.05);
+        dofRef.current.target.z = THREE.MathUtils.lerp(dofRef.current.target.z, tTarget.z, 0.05);
+      }
+      
+      // Update focal properties
+      const targetFocalLength = state3D.dofFocalLength !== undefined ? state3D.dofFocalLength : 0.02;
+      const targetBokehScale = state3D.dofBokehScale !== undefined ? state3D.dofBokehScale : 1.5;
+      
+      dofRef.current.focalLength = THREE.MathUtils.lerp(dofRef.current.focalLength, targetFocalLength, 0.05);
+      dofRef.current.bokehScale = THREE.MathUtils.lerp(dofRef.current.bokehScale, targetBokehScale, 0.05);
+    }
+  });
+  return null;
+}
+
 export default function SceneContainer({ state3D }) {
+  const dofRef = useRef();
   return (
     <div className="webgl-container">
       <Canvas
@@ -58,8 +83,9 @@ export default function SceneContainer({ state3D }) {
         {/* Fog for atmospheric depth — start nearly zero, animated by GSAP */}
         <fogExp2 attach="fog" color="#0E3B2E" density={0.00008} />
 
-        {/* Ambient lighting */}
-        <ambientLight intensity={0.6} color="#c8ddc8" />
+        {/* Ambient lighting & Environment HDR Map */}
+        <ambientLight intensity={0.5} color="#c8ddc8" />
+        <Environment preset="sunset" environmentIntensity={0.8} />
 
         {/* Sun light — high and wide to illuminate the entire 12000-unit terrain */}
         <directionalLight
@@ -117,9 +143,18 @@ export default function SceneContainer({ state3D }) {
         {/* Camera and environment effect controllers */}
         <CameraRig state3D={state3D} />
         <SceneEffectsController state3D={state3D} />
+        <PostProcessingController state3D={state3D} dofRef={dofRef} />
 
         {/* Cinematic Post-Processing Effects */}
         <EffectComposer>
+          {/* Depth of Field simulates professional camera lenses */}
+          <DepthOfField
+            ref={dofRef}
+            target={[800, -20, 400]}
+            focalLength={0.02}
+            bokehScale={1.5}
+            height={480}
+          />
           {/* Bloom adds the premium, volumetric glow to lights, roots, and particles */}
           <Bloom 
             intensity={1.2} 
